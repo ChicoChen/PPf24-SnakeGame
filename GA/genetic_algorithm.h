@@ -1,5 +1,5 @@
 
-#include "snake.h"
+#include "Snake.h"
 
 #include <vector>
 
@@ -12,13 +12,15 @@ class BaseGA{
  */
 public:
     void InitializePopulation();
-    snake GetBestIndividual();
+    Snake GetBestIndividual();
     void performSecletion();
 
     //todo constructor & destructor
+    BaseGA(int populationSize, int numSteps);
+    ~BaseGA() = default;
 
 private:
-    std::vector<snake> population;
+    std::vector<Snake> population;
     std::vector<double> bestScores;
     std::vector<double> avgScores;
     
@@ -27,8 +29,8 @@ private:
 
     virtual void SelectionStep() = 0;
     void EvaluateFitness();
-    double GetFitnessScore(const snake &agent);
+    double GetFitnessScore(const Snake &agent);
     void updatePopulation();
-    snake PerformCrossover(const snake &parent1, const snake &parent2);
-    void PerformMutation(snake &mutant);
+    Snake PerformCrossover(const Snake &parent1, const Snake &parent2);
+    void PerformMutation(Snake &mutant);
 };
