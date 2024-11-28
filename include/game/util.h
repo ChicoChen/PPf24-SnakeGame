@@ -1,6 +1,6 @@
 #pragma once
 
-enum Ctrl { None, Left, Right };
+enum Ctrl {Top, Bottom, Left, Right};
 
 class Point {
   int x, y;
