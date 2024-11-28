@@ -1,4 +1,4 @@
-#include "activation_func.h"
+#include "nn/activation_func.h"
 
 #include <array>
 #include <cmath>
