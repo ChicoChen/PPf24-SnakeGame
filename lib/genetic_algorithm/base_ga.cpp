@@ -1,15 +1,15 @@
-#include "genetic_algorithm.h"
+#include "genetic_algorithm/base_ga.h"
 
 BaseGA::BaseGA(int populationSize, int numSteps){
-    population.reserve(populationSize)
-    bestScores.reserve(numSteps)
-    avgScores.reserve(numSteps)
+    population.reserve(populationSize);
+    bestScores.reserve(numSteps);
+    avgScores.reserve(numSteps);
 
     this->populationSize = populationSize;
     this->numSteps = numSteps;
 }
 
-Snake BaseGA::GetBestIndividual(){
+Agent BaseGA::GetBestIndividual(){
     double maxScore = 0;
     for(auto snake: population){
         //TODO: calculate each snake's fitness

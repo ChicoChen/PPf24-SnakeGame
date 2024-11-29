@@ -24,6 +24,16 @@ target_include_directories(nnlib
     ${PROJECT_SOURCE_DIR}/include
 )
 
+# GA library
+add_library(galib STATIC
+    lib/genetic_algorithm/base_ga.cpp
+)
+
+target_include_directories(galib
+  PUBLIC
+    ${PROJECT_SOURCE_DIR}/include
+)
+
 add_executable(game src/main.cpp)
 
 target_link_libraries(game gamelib)
@@ -31,3 +41,7 @@ target_link_libraries(game gamelib)
 add_executable(nn src/test.cpp)
 
 target_link_libraries(nn nnlib)
+
+add_executable(ga src/test_ga.cpp)
+
+target_link_libraries(ga galib)
