@@ -1,12 +1,14 @@
 #include "game/util.h"
-#include <vector>
+#include <deque>
 class Snake {
 public:
-  void move(Ctrl ctrl);
+  // snake default
+  Snake();
+  bool move(Direction ctrl);
   void grow();
-  const std::vector<Point> &get_body() const;
+  const std::deque<Point> &get_body() const;
 
 private:
-  std::vector<Point> body;
+  std::deque<Point> body;
   Point last_pos;
 };
