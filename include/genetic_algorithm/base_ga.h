@@ -1,8 +1,7 @@
 
-#include <vector>
+#inlcude "nn/individual.h"
 
-// this is a temporary dummy class, stands for a NN player(a combination of weight)
-class Agent{};
+#include <vector>
 
 /*
 Base class for all genetic algorithm implementations.
@@ -11,8 +10,8 @@ It provides common methods such as ...
 */
 class BaseGA{
 public:
-    void InitializePopulation();
-    Agent GetBestIndividual();
+    // return the best individual, parallelized by omp
+    Individual GetBestIndividual();
     void performSecletion();
 
     //todo constructor & destructor
@@ -20,17 +19,17 @@ public:
     ~BaseGA() = default;
 
 private:
-    std::vector<Agent> population;
+    std::vector<Individual> population;
+    std::vector<double> fitness;
     std::vector<double> bestScores;
     std::vector<double> avgScores;
     
     int populationSize;
     int numSteps;
 
-    virtual void SelectionStep() = 0;
     void EvaluateFitness();
-    double GetFitnessScore(const Agent &agent);
+    virtual void SelectionStep() = 0;
     void updatePopulation();
-    Agent PerformCrossover(const Agent &parent1, const Agent &parent2);
-    void PerformMutation(Agent &mutant);
+    void PerformCrossover();
+    void PerformMutation();
 };

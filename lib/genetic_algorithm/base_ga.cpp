@@ -1,19 +1,33 @@
 #include "genetic_algorithm/base_ga.h"
+#include <omp.h>
 
-BaseGA::BaseGA(int populationSize, int numSteps){
-    population.reserve(populationSize);
-    bestScores.reserve(numSteps);
-    avgScores.reserve(numSteps);
-
-    this->populationSize = populationSize;
-    this->numSteps = numSteps;
-}
-
-Agent BaseGA::GetBestIndividual(){
+Individual BaseGA::GetBestIndividual(){
     double maxScore = 0;
-    for(auto snake: population){
-        //TODO: calculate each snake's fitness
+    int bestIndvIdx = -1;
+    
+    #pragma omp parallel
+    {
+        int localMax = 0;
+        int localidx = -1;
+        #pragma omp for
+        for(int i = 0; i < populationSize; i++){
+            double score = fitness[i];
+            if(score > localMax){
+                localMax = score;
+                localidx = i;
+            }
+        }
+
+        #pragma omp critical
+        {
+            if(localMax > maxScore){
+                maxScore = localMax;
+                bestIndvIdx = localidx;
+            }
+        }
     }
+
+    return population[bestIndvIdx];
 }
 
 void BaseGA::performSecletion(){
@@ -22,4 +36,22 @@ void BaseGA::performSecletion(){
         SelectionStep();
         updatePopulation();
     }
+}
+BaseGA::BaseGA(int populationSize, int numSteps):
+    population(populationSize),
+    fitness(numSteps, 0),
+    bestScores(numSteps, 0),
+    avgScores(numSteps, 0),
+    populationSize(populationSize),
+    numSteps(numSteps) {}
+
+void BaseGA::EvaluateFitness(){
+    #pragma omp for
+    for(int i = 0; i < populationSize; i++){
+        fitness[i] = population[i].fitness(); //TODO: resolve false sharing
+    }
+}
+
+void BaseGA::updatePopulation(){
+    
 }
