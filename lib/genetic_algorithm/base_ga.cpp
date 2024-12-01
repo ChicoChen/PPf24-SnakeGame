@@ -30,13 +30,14 @@ Individual BaseGA::GetBestIndividual(){
     return population[bestIndvIdx];
 }
 
-void BaseGA::performSecletion(){
+void BaseGA::performSelection(){
     for(int i = 0; i < numSteps; i++){
         EvaluateFitness();
         SelectionStep();
         updatePopulation();
     }
 }
+
 BaseGA::BaseGA(int populationSize, int numSteps):
     population(populationSize),
     fitness(numSteps, 0),
@@ -48,10 +49,11 @@ BaseGA::BaseGA(int populationSize, int numSteps):
 void BaseGA::EvaluateFitness(){
     #pragma omp for
     for(int i = 0; i < populationSize; i++){
-        fitness[i] = population[i].fitness(); //TODO: resolve false sharing
+        //TODO: resolve false sharing
+        fitness[i] = population[i].fitness();
     }
 }
 
 void BaseGA::updatePopulation(){
-    
+
 }
