@@ -1,4 +1,5 @@
 #include "game/snake.h"
+#include "game/util.h"
 
 Snake::Snake() {
   body.push_back(Point(5, 5));
@@ -39,4 +40,46 @@ void Snake::grow() {
 
 const std::deque<Point> &Snake::get_body() const {
   return body;
+}
+
+Direction Snake::head_direction() const {
+  if (body.size() < 2) {
+    return Direction::None;
+  }
+  Point head = body[0];
+  Point neck = body[1];
+  if (head.x == neck.x) {
+    if (head.y > neck.y) {
+      return Direction::Top;
+    } else {
+      return Direction::Bottom;
+    }
+  } else {
+    if (head.x > neck.x) {
+      return Direction::Left;
+    } else {
+      return Direction::Right;
+    }
+  }
+}
+
+Direction Snake::tail_direction() const {
+  if (body.size() < 2) {
+    return Direction::None;
+  }
+  Point tail = body.back();
+  Point last = last_pos;
+  if (tail.x == last.x) {
+    if (tail.y > last.y) {
+      return Direction::Top;
+    } else {
+      return Direction::Bottom;
+    }
+  } else {
+    if (tail.x > last.x) {
+      return Direction::Left;
+    } else {
+      return Direction::Right;
+    }
+  }
 }

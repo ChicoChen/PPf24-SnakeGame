@@ -7,7 +7,7 @@ class Game {
 public:
   Game();
   bool run(Direction ctrl);
-  std::vector<float> get_features();
+  std::vector<float> get_features() const;
   void dump() const;
 
 private:
