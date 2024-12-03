@@ -91,6 +91,8 @@ std::vector<float> Game::get_features() const {
     float dist_to_wall = 0.0;
     float dist = 1.0;
     Point now = head;
+    now.x += eight_directions[i].second;
+    now.y += eight_directions[i].first;
     bool slef_found = false;
     bool food_found = false;
     while (now.x >= 0 && now.x < 10 && now.y >= 0 && now.y < 10) {
