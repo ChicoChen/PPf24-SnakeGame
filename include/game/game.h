@@ -13,4 +13,5 @@ public:
 private:
   Snake snake;
   Point food;
+  std::set<Point> food_cand;
 };

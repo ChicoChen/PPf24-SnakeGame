@@ -83,3 +83,7 @@ Direction Snake::tail_direction() const {
     }
   }
 }
+
+const Point &Snake::get_last_pos() const {
+  return last_pos;
+}
