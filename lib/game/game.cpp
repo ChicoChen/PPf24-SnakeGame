@@ -113,10 +113,10 @@ std::vector<float> Game::get_features() const {
     features.push_back(dist_to_self);
     features.push_back(dist_to_wall);
   }
-  for (int i = 0; i < 4; i++) {
+  for (int i = 1; i <= 4; i++) {
     features.push_back(snake.head_direction() == i);
   }
-  for (int i = 0; i < 4; i++) {
+  for (int i = 1; i <= 4; i++) {
     features.push_back(snake.tail_direction() == i);
   }
   return features; 
