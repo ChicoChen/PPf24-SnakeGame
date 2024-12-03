@@ -26,5 +26,10 @@ int main() {
       break;
     }
     game.dump();
+    std::vector<float> features = game.get_features();
+    for (auto &f : features) {
+      printf("%f ", f);
+    }
+    printf("\n");
   }
 }
