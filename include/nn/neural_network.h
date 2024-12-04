@@ -17,9 +17,10 @@ public:
     Layer(const Layer&) = delete;
     Layer& operator=(const Layer&) = delete;
 
-    void forward(std::vector<float>& input);
+    std::vector<float> forward(std::vector<float>& input);
     void set_weights(float* new_weights);
     void save(std::ofstream& file);
+    void print_layer();
 
 private:
     int input_size;
@@ -35,9 +36,9 @@ public:
     MLP(int* layer_sizes, int num_layers, const std::string& layer_activation, const std::string& output_activation);
     MLP(const std::string& filename);  // Load weights from file
 
-    void forward(std::vector<float>& input);
+    std::vector<float> forward(std::vector<float>& input);
     void save(const std::string& filename);
-
+    void print_layers();
 private:
     std::vector<Layer> layers;
 };
