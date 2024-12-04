@@ -7,11 +7,11 @@ Individual::Individual() {
 }
 
 Direction Individual::get_direction(std::vector<float>& features) {
-    network.forward(features);
+    std::vector<float> output = network.forward(features);
     // argmax for features
     int max_idx = 0;
-    for (int i = 1; i < features.size(); i++) {
-        if (features[i] > features[max_idx]) max_idx = i;
+    for (int i = 1; i < output.size(); i++) {
+        if (output[i] > output[max_idx]) max_idx = i;
     }
     return static_cast<Direction>(max_idx);
 }
@@ -26,8 +26,7 @@ double Individual::fitness() {
     Direction direction;
 
     do {
-        std::vector<float> features = game.get_features();
-        direction = get_direction(features);
+        direction = get_direction(game.get_features());
     } while (game.run(direction));
 
     _fitness = game.calculate_fitness();

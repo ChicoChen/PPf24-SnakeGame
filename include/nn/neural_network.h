@@ -20,6 +20,7 @@ public:
     std::vector<float> forward(std::vector<float>& input);
     void set_weights(float* new_weights);
     void save(std::ofstream& file);
+    void print_layer();
 
 private:
     int input_size;
@@ -37,7 +38,7 @@ public:
 
     std::vector<float> forward(std::vector<float>& input);
     void save(const std::string& filename);
-
+    void print_layers();
 private:
     std::vector<Layer> layers;
 };

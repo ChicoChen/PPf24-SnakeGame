@@ -116,10 +116,10 @@ std::vector<float> &Game::get_features() {
     features[i * 3 + 2] = (dist_to_wall);
   }
   for (int i = 1; i <= 4; i++) {
-    features[24 + i] = snake.head_direction() == i;
+    features[23 + i] = snake.head_direction() == i;
   }
   for (int i = 1; i <= 4; i++) {
-    features[28 + i] = snake.tail_direction() == i;
+    features[27 + i] = snake.tail_direction() == i;
   }
   return features; 
 }

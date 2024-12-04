@@ -8,15 +8,18 @@ int main() {
 
     std::vector<float> arr{1, 2};
 
-    mlp.forward(arr);
-    std::cout << arr[0] << std::endl;
+    std::vector<float> output = mlp.forward(arr);
+    std::cout << output[0] << std::endl;
+
+    for (int i : arr) {
+        std::cout << i << " ";
+    }
+    std::cout << std::endl;
 
     mlp.save("model.bin");
 
     MLP mlp2("model.bin");
-
-    mlp2.forward(arr);
-
-    std::cout << arr[0] << std::endl;
+    output = mlp2.forward(arr);
+    std::cout << output[0] << std::endl;
     return 0;
 }
