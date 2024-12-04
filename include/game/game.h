@@ -9,9 +9,12 @@ public:
   bool run(Direction ctrl);
   std::vector<float> get_features() const;
   void dump() const;
+  float calculate_fitness() const;
 
 private:
   Snake snake;
   Point food;
   std::set<Point> food_cand;
+  int frame;
+  int score;
 };

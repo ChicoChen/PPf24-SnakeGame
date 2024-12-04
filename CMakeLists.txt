@@ -1,8 +1,11 @@
 cmake_minimum_required(VERSION 3.1)
 project(SnakeGame VERSION 1.0
                   LANGUAGES CXX)
+
 # CXX standard
 set(CMAKE_CXX_STANDARD 17)
+
+# third party libraries
 
 # game library
 add_library(gamelib STATIC
@@ -22,6 +25,17 @@ add_library(nnlib STATIC
 )
 
 target_include_directories(nnlib
+  PUBLIC
+    ${PROJECT_SOURCE_DIR}/include
+)
+
+# GA library
+add_library(galib STATIC
+    lib/ga/base_ga.cpp
+    lib/ga/individual.cpp
+)
+
+target_include_directories(galib
   PUBLIC
     ${PROJECT_SOURCE_DIR}/include
 )

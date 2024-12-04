@@ -3,7 +3,7 @@
 #include <iterator>
 
 
-std::pair<int, int> eight_directions[8] = {
+static std::pair<int, int> eight_directions[8] = {
   {-1, -1}, {-1, 0}, {-1, 1},
   {0, -1}, {0, 1},
   {1, -1}, {1, 0}, {1, 1}
@@ -11,7 +11,6 @@ std::pair<int, int> eight_directions[8] = {
 
 Game::Game() {
   snake = Snake();
-  // food.insert(Point(5, 5));
   for (int i = 0; i < 10; i++) {
     for (int j = 0; j < 10; j++) {
       food_cand.insert(Point(i, j));
@@ -34,6 +33,7 @@ bool Game::run(Direction ctrl) {
     return false;
   }
   food_cand.erase(snake.get_body().front());
+  frame++;
   if (snake.get_body().front().x == food.x && snake.get_body().front().y == food.y) {
     snake.grow();
     int idx_rand = rand() % food_cand.size();
@@ -41,6 +41,7 @@ bool Game::run(Direction ctrl) {
     std::advance(it, idx_rand);
     food = *it;
     food_cand.erase(it);
+    score++;
   }
   else {
     food_cand.insert(snake.get_last_pos());
@@ -120,4 +121,9 @@ std::vector<float> Game::get_features() const {
     features.push_back(snake.tail_direction() == i);
   }
   return features; 
+}
+
+float Game::calculate_fitness() const {
+  // self._fitness = self._frames + ((2 ** self.score) + (self.score ** 2.1) * 100) - ((.25 * self._frames) ** 1.3) * (self.score ** 1.2))
+  return frame + (pow(2, score) + pow(score, 2.1) * 100) - (pow(0.25 * frame, 1.3) * pow(score, 1.2));
 }
