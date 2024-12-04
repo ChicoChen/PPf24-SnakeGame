@@ -1,6 +1,6 @@
-#include "nn/neural_network.h"
-
 #include <iostream>
+
+#include "nn/neural_network.h"
 
 int main() {
     int layer_sizes[] = {2, 3, 1};

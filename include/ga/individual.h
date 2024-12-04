@@ -15,4 +15,5 @@ public:
     double fitness();
 private:
     MLP network;
+    double _fitness;
 };
