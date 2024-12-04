@@ -34,7 +34,6 @@ bool Snake::move(Direction ctrl) {
 }
 
 void Snake::grow() {
-  printf("grow\n");
   body.push_back(last_pos);
 }
 

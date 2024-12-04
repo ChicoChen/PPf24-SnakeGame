@@ -10,6 +10,8 @@ static std::pair<int, int> eight_directions[8] = {
 };
 
 Game::Game() {
+  features.clear();
+  features.resize(32);
   snake = Snake();
   for (int i = 0; i < 10; i++) {
     for (int j = 0; j < 10; j++) {
@@ -76,16 +78,15 @@ void Game::dump() const {
   printf("############\n");
 }
 
-std::vector<float> Game::get_features() const {
-  std::vector<float> features;
-  features.reserve(32);
+std::vector<float> &Game::get_features() {
+  // std::vector<float> features;
+  // features.reserve(32);
   std::vector<std::vector<int> > board(10, std::vector<int>(10, 0));
   for (auto &p : snake.get_body()) {
     board[p.y][p.x] = 1;
   }
   board[food.y][food.x] = 2;
   Point head = snake.get_body().front();
-  // Point tail = snake.get_body().back();
   for (int i = 0; i < 8; i++) {
     float dist_to_apple = 0.0;
     float dist_to_self = 0.0;
@@ -110,15 +111,15 @@ std::vector<float> Game::get_features() const {
       dist += sqrt(eight_directions[i].second * eight_directions[i].second + eight_directions[i].first * eight_directions[i].first);
     }
     dist_to_wall = 1 / dist;
-    features.push_back(dist_to_apple);
-    features.push_back(dist_to_self);
-    features.push_back(dist_to_wall);
+    features[i * 3] = (dist_to_apple);
+    features[i * 3 + 1] =(dist_to_self);
+    features[i * 3 + 2] = (dist_to_wall);
   }
   for (int i = 1; i <= 4; i++) {
-    features.push_back(snake.head_direction() == i);
+    features[24 + i] = snake.head_direction() == i;
   }
   for (int i = 1; i <= 4; i++) {
-    features.push_back(snake.tail_direction() == i);
+    features[28 + i] = snake.tail_direction() == i;
   }
   return features; 
 }
