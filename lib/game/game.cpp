@@ -106,7 +106,7 @@ std::vector<float> Game::get_features() const {
       }
       now.x += eight_directions[i].second;
       now.y += eight_directions[i].first;
-      dist += 1.0;
+      dist += sqrt(eight_directions[i].second * eight_directions[i].second + eight_directions[i].first * eight_directions[i].first);
     }
     dist_to_wall = 1 / dist;
     features.push_back(dist_to_apple);
