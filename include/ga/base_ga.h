@@ -1,6 +1,6 @@
+#pragma once
 
-#inlcude "nn/individual.h"
-
+#include "ga/individual.h"
 #include <vector>
 
 /*

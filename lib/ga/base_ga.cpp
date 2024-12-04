@@ -1,4 +1,4 @@
-#include "genetic_algorithm/base_ga.h"
+#include "ga/base_ga.h"
 #include <omp.h>
 
 Individual BaseGA::GetBestIndividual(){

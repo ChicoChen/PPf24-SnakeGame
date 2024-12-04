@@ -6,18 +6,17 @@ int main() {
     int layer_sizes[] = {2, 3, 1};
     MLP mlp(layer_sizes, 2, "relu", "sigmoid");
 
-    float input[] = {1, 2};
-    float output[1];
+    std::vector<float> arr{1, 2};
 
-    mlp.forward(input, output);
-    std::cout << output[0] << std::endl;
+    mlp.forward(arr);
+    std::cout << arr[0] << std::endl;
 
     mlp.save("model.bin");
 
     MLP mlp2("model.bin");
 
-    mlp2.forward(input, output);
+    mlp2.forward(arr);
 
-    std::cout << output[0] << std::endl;
+    std::cout << arr[0] << std::endl;
     return 0;
 }

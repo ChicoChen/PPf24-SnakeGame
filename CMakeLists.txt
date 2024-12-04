@@ -26,7 +26,8 @@ target_include_directories(nnlib
 
 # GA library
 add_library(galib STATIC
-    lib/genetic_algorithm/base_ga.cpp
+    lib/ga/base_ga.cpp
+    lib/ga/individual.cpp
 )
 
 target_include_directories(galib
