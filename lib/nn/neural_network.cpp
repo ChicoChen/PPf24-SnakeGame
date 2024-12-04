@@ -7,6 +7,8 @@ MLP::MLP(int* layer_sizes, int num_layers, const std::string& layer_activation, 
     for (int i = 0; i < num_layers; i++) {
         layers.emplace_back(layer_sizes[i], layer_sizes[i + 1], i == num_layers - 1 ? output_activation : layer_activation);
     }
+
+    print_layers();
 }
 
 MLP::MLP(const std::string& filename) {
@@ -21,13 +23,16 @@ MLP::MLP(const std::string& filename) {
     for (int i = 0; i < num_layers; i++) {
         layers.emplace_back(file);
     }
+
+    print_layers();
 }
 
-void MLP::forward(std::vector<float>& input) {
-    std::vector<float>& output = input;
-    for (auto& layer : layers) {
-        layer.forward(output);
+std::vector<float> MLP::forward(std::vector<float>& input) {
+    std::vector<float> output = layers[0].forward(input);
+    for (int i = 1; i < layers.size(); i++) {
+        output = layers[i].forward(output);
     }
+    return output;
 }
 
 void MLP::save(const std::string& filename) {
@@ -39,6 +44,12 @@ void MLP::save(const std::string& filename) {
     file << layers.size() << std::endl;
     for (auto& layer : layers) {
         layer.save(file);
+    }
+}
+
+void MLP::print_layers() {
+    for (auto& layer : layers) {
+        layer.print_layer();
     }
 }
 
@@ -93,7 +104,7 @@ void Layer::set_weights(float* new_weights) {
     std::copy(new_weights, new_weights + (input_size + 1) * output_size, weights.get());
 }
 
-void Layer::forward(std::vector<float>& input) {
+std::vector<float> Layer::forward(std::vector<float>& input) {
     std::vector<float> output(output_size);
     for (int i = 0; i < output_size; i++) {
         output[i] = weights[input_size * output_size + i]; // bias
@@ -102,7 +113,7 @@ void Layer::forward(std::vector<float>& input) {
         }
         output[i] = activation_func(output[i]);
     }
-    output.swap(input);
+    return output;
 }
 
 void Layer::save(std::ofstream& file) {
@@ -111,4 +122,14 @@ void Layer::save(std::ofstream& file) {
         file << weights[i] << " ";
     }
     file << std::endl;
+}
+
+void Layer::print_layer() {
+    for (int i = 0; i < input_size + 1; i++) {
+        for (int j = 0; j < output_size; j++) {
+            std::cout << weights[i * output_size + j] << " ";
+        }
+        std::cout << std::endl;
+    }
+    std::cout << to_string(activation) << std::endl;
 }
