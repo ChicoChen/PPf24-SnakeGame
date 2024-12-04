@@ -9,7 +9,7 @@ public:
     Individual(const Individual& other);
     ~Individual() = default;
 
-    Ctrl get_direction(std::vector<float>& features);
+    Direction get_direction(std::vector<float>& features);
     void mutate();
     std::vector<Individual> crossover(const Individual& other);
     double fitness();
