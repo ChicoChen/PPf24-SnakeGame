@@ -95,12 +95,12 @@ std::vector<float> &Game::get_features() {
     Point now = head;
     now.x += eight_directions[i].second;
     now.y += eight_directions[i].first;
-    bool slef_found = false;
+    bool self_found = false;
     bool food_found = false;
     while (now.x >= 0 && now.x < 10 && now.y >= 0 && now.y < 10) {
-      if (!slef_found && board[now.y][now.x] == 1) {
+      if (!self_found && board[now.y][now.x] == 1) {
         dist_to_self = 1.0;
-        slef_found = true;
+        self_found = true;
       }
       if (!food_found && board[now.y][now.x] == 2) {
         dist_to_apple = 1.0;
