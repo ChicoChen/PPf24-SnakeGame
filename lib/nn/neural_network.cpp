@@ -23,10 +23,10 @@ MLP::MLP(const std::string& filename) {
     }
 }
 
-void MLP::forward(float* input, float* output) {
+void MLP::forward(std::vector<float>& input) {
+    std::vector<float>& output = input;
     for (auto& layer : layers) {
-        layer.forward(input, output);
-        input = output;
+        layer.forward(output);
     }
 }
 
@@ -93,7 +93,8 @@ void Layer::set_weights(float* new_weights) {
     std::copy(new_weights, new_weights + (input_size + 1) * output_size, weights.get());
 }
 
-void Layer::forward(float* input, float* output) {
+void Layer::forward(std::vector<float>& input) {
+    std::vector<float> output(output_size);
     for (int i = 0; i < output_size; i++) {
         output[i] = weights[input_size * output_size + i]; // bias
         for (int j = 0; j < input_size; j++) {
@@ -101,6 +102,7 @@ void Layer::forward(float* input, float* output) {
         }
         output[i] = activation_func(output[i]);
     }
+    output.swap(input);
 }
 
 void Layer::save(std::ofstream& file) {
