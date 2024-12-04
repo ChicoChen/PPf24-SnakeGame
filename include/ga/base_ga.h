@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ga/individual.h"
+#include <random>
 #include <vector>
 
 /*
@@ -15,25 +16,31 @@ public:
     // perform the whole selection process.
     void performSelection();
 
-    //todo constructor & destructor
+    //todo: constructor & destructor
     BaseGA(int populationSize, int numSteps);
     ~BaseGA() = default;
 
 private:
     std::vector<Individual> population;
-    std::vector<double> fitness;
-    std::vector<double> bestScores;
+    std::vector<double> bestScores; 
     std::vector<double> avgScores;
     
     int populationSize;
+    int currentPopulation = 0;
+    int numSurvivor;
     int numSteps;
+
+    std::mt19937 gen;
     
     // Evaluate fitness score for all current population;
     void EvaluateFitness();
+    
     // Retain only the top n% of the population, various implementation depending on the GA model.
     virtual void SelectionStep() = 0;
-    // fill the population gap using crossover or mutation
+    
+    // performing crossover and mutation to fill the population gap result from selection.
     void updatePopulation();
-    void PerformCrossover();
-    void PerformMutation();
+
+    // select 2 parents from suriviors using Roulette Wheel approach
+    std::vector<int> selectParents(double sum);
 };
