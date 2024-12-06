@@ -4,6 +4,9 @@
 #include <random>
 #include <vector>
 
+#define TOTAL_POPULATION 100
+#define TOTAL_SUIVIVOR 50
+
 /*
 Base class for all genetic algorithm implementations.
 This class serves as the foundation for implementing various genetic algorithms. 
@@ -16,7 +19,7 @@ public:
     // perform the whole selection process.
     void performSelection();
 
-    BaseGA(int populationSize, int numSteps);
+    BaseGA(int populationSize = TOTAL_POPULATION, int numSteps = TOTAL_SUIVIVOR);
     ~BaseGA() = default;
 
 private:
