@@ -32,9 +32,8 @@ Individual BaseGA::GetBestIndividual(){
 }
 
 void BaseGA::performSelection(){
-    //todo: track avg Score and best Score of each step.
     for(int i = 0; i < numSteps; i++){
-        EvaluateFitness();
+        EvaluateFitness(i);
         SelectionStep();
         updatePopulation();
     }
@@ -49,9 +48,16 @@ BaseGA::BaseGA(int populationSize, int numSteps):
     numSurvivor(0), //todo: build an env file to handle hyperparameters 
     gen(std::random_device{}()){}
 
-void EvaluateFitness(){
-    //todo: evaluate fitness of populations
+void BaseGA::EvaluateFitness(int iteration){
+    //when Individual.fitness() is called, fitness score of each object is calculated and cached for furture access
     //* potential chance for parallel.
+    for(int i = 0; i < populationSize; i++){
+        avgScores[iteration] += population[i].fitness();
+        bestScores[iteration] = (population[i].fitness() > bestScores[iteration])?
+                                population[i].fitness():
+                                bestScores[iteration];
+    }
+    avgScores[iteration] /= populationSize ;
 }
 
 

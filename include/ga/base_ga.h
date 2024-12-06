@@ -16,7 +16,6 @@ public:
     // perform the whole selection process.
     void performSelection();
 
-    //todo: constructor & destructor
     BaseGA(int populationSize, int numSteps);
     ~BaseGA() = default;
 
@@ -33,7 +32,7 @@ private:
     std::mt19937 gen;
     
     // Evaluate fitness score for all current population;
-    void EvaluateFitness();
+    void EvaluateFitness(int iteration);
     
     // Retain only the top n% of the population, various implementation depending on the GA model.
     virtual void SelectionStep() = 0;
