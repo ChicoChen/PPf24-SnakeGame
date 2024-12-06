@@ -1,33 +1,19 @@
 #include "ga/base_ga.h"
 #include <omp.h>
+#include <cassert>
 #include <algorithm>
 
 Individual BaseGA::GetBestIndividual(){
-    double maxScore = 0;
     int bestIndvIdx = -1;
-    
-    #pragma omp parallel
-    {
-        int localMax = 0;
-        int localidx = -1;
-        #pragma omp for
-        for(int i = 0; i < populationSize; i++){
-            double score = population[i].fitness();
-            if(score > localMax){
-                localMax = score;
-                localidx = i;
-            }
-        }
-
-        #pragma omp critical
-        {
-            if(localMax > maxScore){
-                maxScore = localMax;
-                bestIndvIdx = localidx;
-            }
+    double maxScore = 0;
+    for(int i = 0; i < populationSize; i++){
+        if(population[i].fitness() > maxScore){
+            maxScore = population[i].fitness();
+            bestIndvIdx = i;
         }
     }
-
+    
+    assert(bestIndvIdx >= 0);
     return population[bestIndvIdx];
 }
 
@@ -45,7 +31,7 @@ BaseGA::BaseGA(int populationSize, int numSteps):
     avgScores(numSteps, 0),
     populationSize(populationSize),
     numSteps(numSteps),
-    numSurvivor(0), //todo: build an env file to handle hyperparameters 
+    numSurvivor(populationSize / 2), //todo: build an env file to handle hyperparameters 
     gen(std::random_device{}()){}
 
 void BaseGA::EvaluateFitness(int iteration){

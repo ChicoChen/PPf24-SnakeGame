@@ -5,7 +5,7 @@
 #include <vector>
 
 #define TOTAL_POPULATION 100
-#define TOTAL_SUIVIVOR 50
+#define TOTAL_STEP 5
 
 /*
 Base class for all genetic algorithm implementations.
@@ -15,11 +15,11 @@ It provides common methods such as ...
 class BaseGA{
 public:
     // return the best individual, parallelized by omp
-    Individual GetBestIndividual();
+    virtual Individual GetBestIndividual();
     // perform the whole selection process.
     void performSelection();
 
-    BaseGA(int populationSize = TOTAL_POPULATION, int numSteps = TOTAL_SUIVIVOR);
+    BaseGA(int populationSize = TOTAL_POPULATION, int numSteps = TOTAL_STEP);
     ~BaseGA() = default;
 
 private:
@@ -35,7 +35,7 @@ private:
     std::mt19937 gen;
     
     // Evaluate fitness score for all current population;
-    void EvaluateFitness(int iteration);
+    virtual void EvaluateFitness(int iteration);
     
     // Retain only the top n% of the population, various implementation depending on the GA model.
     virtual void SelectionStep() = 0;
