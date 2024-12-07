@@ -44,7 +44,7 @@ add_executable(game src/test_game.cpp)
 
 target_link_libraries(game gamelib)
 
-add_executable(nn src/test.cpp)
+add_executable(nn src/test_nn.cpp)
 
 target_link_libraries(nn nnlib)
 
