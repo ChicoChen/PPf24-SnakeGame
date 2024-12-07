@@ -22,15 +22,17 @@ public:
     BaseGA(int populationSize = TOTAL_POPULATION, int numSteps = TOTAL_STEP);
     ~BaseGA() = default;
 
+protected:
+    std::vector<Individual>& getPopulation(){ return population; }
+    int populationSize;
+    int currentPopulation;
+    int numSurvivor;
+    int numSteps;
+
 private:
     std::vector<Individual> population;
     std::vector<double> bestScores; 
     std::vector<double> avgScores;
-    
-    int populationSize;
-    int currentPopulation = 0;
-    int numSurvivor;
-    int numSteps;
 
     std::mt19937 gen;
     

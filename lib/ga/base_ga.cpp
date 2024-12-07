@@ -30,6 +30,7 @@ BaseGA::BaseGA(int populationSize, int numSteps):
     bestScores(numSteps, 0),
     avgScores(numSteps, 0),
     populationSize(populationSize),
+    currentPopulation(populationSize),
     numSteps(numSteps),
     numSurvivor(populationSize / 2), //todo: build an env file to handle hyperparameters 
     gen(std::random_device{}()){}
