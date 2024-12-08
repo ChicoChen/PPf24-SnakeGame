@@ -32,6 +32,7 @@ target_include_directories(nnlib
 # GA library
 add_library(galib STATIC
     lib/ga/base_ga.cpp
+    lib/ga/serial_ga.cpp
     lib/ga/individual.cpp
 )
 
@@ -50,4 +51,4 @@ target_link_libraries(nn nnlib)
 
 add_executable(ga src/test_ga.cpp)
 
-target_link_libraries(ga galib)
+target_link_libraries(ga galib nnlib gamelib)

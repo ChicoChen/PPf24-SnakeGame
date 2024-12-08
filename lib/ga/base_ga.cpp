@@ -3,7 +3,7 @@
 #include <cassert>
 #include <algorithm>
 
-Individual BaseGA::GetBestIndividual(){
+const Individual& BaseGA::GetBestIndividual(){
     int bestIndvIdx = -1;
     double maxScore = 0;
     for(int i = 0; i < populationSize; i++){
@@ -32,7 +32,7 @@ BaseGA::BaseGA(int populationSize, int numSteps):
     populationSize(populationSize),
     currentPopulation(populationSize),
     numSteps(numSteps),
-    numSurvivor(populationSize / 2), //todo: build an env file to handle hyperparameters 
+    numSurvivor(populationSize * SURVIVAL_RATE), //todo: build an env file to handle hyperparameters 
     gen(std::random_device{}()){}
 
 void BaseGA::EvaluateFitness(int iteration){

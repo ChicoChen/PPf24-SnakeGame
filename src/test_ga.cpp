@@ -1,7 +1,9 @@
-#include "ga/base_ga.h"
+#include "ga/serial_ga.h"
 #include <iostream>
 
-using namespace std;
 int main() {
-    cout << "hello world" << endl;
+    SerialGA demo;
+    demo.performSelection();
+    Individual best = demo.GetBestIndividual();
+    return 0;
 }

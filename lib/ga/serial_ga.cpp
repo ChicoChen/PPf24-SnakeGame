@@ -2,8 +2,8 @@
 
 #include <algorithm>
 
-void SerialGA::SelectionStep(){
+void SerialGA::SelectionStep() {
     std::sort(getPopulation().begin(), getPopulation().end(),
-              [](Individual a, Individual b)-> bool {return a.fitness() > b.fitness();});
+              [](Individual &a, Individual &b)-> bool {return a.fitness() > b.fitness();});
     currentPopulation = numSurvivor;
 }

@@ -4,8 +4,9 @@
 #include <random>
 #include <vector>
 
-#define TOTAL_POPULATION 100
-#define TOTAL_STEP 5
+#define DEFAULT_POPULATION 100
+#define DEFAULT_STEP 5
+#define SURVIVAL_RATE 0.5
 
 /*
 Base class for all genetic algorithm implementations.
@@ -15,11 +16,11 @@ It provides common methods such as ...
 class BaseGA{
 public:
     // return the best individual, parallelized by omp
-    virtual Individual GetBestIndividual();
+    virtual const Individual& GetBestIndividual();
     // perform the whole selection process.
     void performSelection();
 
-    BaseGA(int populationSize = TOTAL_POPULATION, int numSteps = TOTAL_STEP);
+    BaseGA(int populationSize = DEFAULT_POPULATION, int numSteps = DEFAULT_STEP);
     ~BaseGA() = default;
 
 protected:
