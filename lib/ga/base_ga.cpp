@@ -44,7 +44,7 @@ void BaseGA::EvaluateFitness(int iteration){
                                 population[i].fitness():
                                 bestScores[iteration];
     }
-    avgScores[iteration] /= populationSize ;
+    avgScores[iteration] /= populationSize;
 }
 
 
@@ -64,7 +64,7 @@ void BaseGA::updatePopulation(){
         std::vector<Individual> children = father.crossover(mother);
         for(auto &child : children){
             child.mutate(); // currently do nothing
-            population[currentPopulation] = child; //? how about using std::move()?
+            population[currentPopulation] = std::move(child);
             currentPopulation++;
         }
     }
