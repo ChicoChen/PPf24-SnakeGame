@@ -9,6 +9,8 @@ public:
     Individual(const Individual& other);
     ~Individual() = default;
 
+    Individual& operator=(Individual&& other) noexcept = default;
+
     Direction get_direction(std::vector<float>& features);
     void mutate();
     std::vector<Individual> crossover(const Individual& other);
