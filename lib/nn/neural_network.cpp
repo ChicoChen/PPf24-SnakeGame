@@ -3,7 +3,7 @@
 #include <iostream>
 #include <fstream>
 
-MLP::MLP(int* layer_sizes, int num_layers, const std::string& layer_activation, const std::string& output_activation) {
+MLP::MLP(const int* layer_sizes, int num_layers, const std::string& layer_activation, const std::string& output_activation) {
     for (int i = 0; i < num_layers; i++) {
         layers.emplace_back(layer_sizes[i], layer_sizes[i + 1], i == num_layers - 1 ? output_activation : layer_activation);
     }
@@ -98,6 +98,16 @@ Layer& Layer::operator=(Layer&& other) noexcept {
         weights = std::move(other.weights);
     }
     return *this;
+}
+
+Layer::Layer(const Layer& other)
+    : input_size(other.input_size), output_size(other.output_size),
+    activation(other.activation), activation_func(other.activation_func){
+    size_t weight_size = (input_size + 1) * output_size;
+    this->weights = std::make_unique<float[]>(weight_size);
+    
+    //perform deep copy from other.weights
+    this->set_weights(other.weights.get());
 }
 
 void Layer::set_weights(float* new_weights) {

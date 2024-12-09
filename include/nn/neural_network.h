@@ -14,7 +14,8 @@ public:
     Layer(Layer&& other) noexcept;
     Layer& operator=(Layer&& other) noexcept;
 
-    Layer(const Layer&) = delete;
+    //deep copy constructor
+    Layer(const Layer& other);
     Layer& operator=(const Layer&) = delete;
 
     std::vector<float> forward(std::vector<float>& input);
@@ -32,13 +33,19 @@ private:
 
 class MLP {
 public:
+    friend class Individual;
+
     MLP();
-    MLP(int* layer_sizes, int num_layers, const std::string& layer_activation, const std::string& output_activation);
+    MLP(const int* layer_sizes, int num_layers, const std::string& layer_activation, const std::string& output_activation);
     MLP(const std::string& filename);  // Load weights from file
 
     std::vector<float> forward(std::vector<float>& input);
     void save(const std::string& filename);
     void print_layers();
+
+protected:
+    std::vector<Layer>& getLayers() {return layers; }
+
 private:
     std::vector<Layer> layers;
 };
