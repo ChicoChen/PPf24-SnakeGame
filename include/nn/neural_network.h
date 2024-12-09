@@ -19,6 +19,10 @@ public:
     Layer& operator=(const Layer&) = delete;
 
     std::vector<float> forward(std::vector<float>& input);
+    
+    size_t getWeightSize();
+    const float* getWeight();
+
     void set_weights(float* new_weights);
     void save(std::ofstream& file);
     void print_layer();

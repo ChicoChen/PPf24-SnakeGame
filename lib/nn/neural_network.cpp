@@ -110,8 +110,16 @@ Layer::Layer(const Layer& other)
     this->set_weights(other.weights.get());
 }
 
+size_t Layer::getWeightSize(){
+    return (input_size + 1) * output_size;
+}
+
+const float* Layer::getWeight(){
+    return weights.get();
+}
+
 void Layer::set_weights(float* new_weights) {
-    std::copy(new_weights, new_weights + (input_size + 1) * output_size, weights.get());
+    std::copy(new_weights, new_weights + this->getWeightSize(), weights.get());
 }
 
 std::vector<float> Layer::forward(std::vector<float>& input) {
