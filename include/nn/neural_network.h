@@ -16,14 +16,14 @@ public:
 
     //deep copy constructor
     Layer(const Layer& other);
-    Layer& operator=(const Layer&) = delete;
+    Layer& operator=(const Layer& other);
 
     std::vector<float> forward(std::vector<float>& input);
     
-    size_t getWeightSize();
-    const float* getWeight();
+    size_t getWeightSize() const;
+    const float* getWeight() const;
 
-    void set_weights(float* new_weights);
+    void set_weights(const float* new_weights);
     void save(std::ofstream& file);
     void print_layer();
 

@@ -8,7 +8,7 @@ MLP::MLP(const int* layer_sizes, int num_layers, const std::string& layer_activa
         layers.emplace_back(layer_sizes[i], layer_sizes[i + 1], i == num_layers - 1 ? output_activation : layer_activation);
     }
 
-    print_layers();
+    // print_layers();
 }
 
 MLP::MLP(const std::string& filename) {
@@ -24,7 +24,7 @@ MLP::MLP(const std::string& filename) {
         layers.emplace_back(file);
     }
 
-    print_layers();
+    // print_layers();
 }
 
 std::vector<float> MLP::forward(std::vector<float>& input) {
@@ -109,15 +109,29 @@ Layer::Layer(const Layer& other)
     this->set_weights(other.weights.get());
 }
 
-size_t Layer::getWeightSize(){
+Layer& Layer::operator=(const Layer& other){
+    if (this != &other) {
+        this->input_size = other.input_size;
+        this->output_size = other.output_size;
+        this->activation = other.activation;
+        this->activation_func = other.activation_func;
+
+        weights.reset(new float[this->getWeightSize()]);
+        this->set_weights(other.getWeight());
+    }
+
+    return *this;
+}
+
+size_t Layer::getWeightSize() const {
     return (input_size + 1) * output_size;
 }
 
-const float* Layer::getWeight(){
+const float* Layer::getWeight() const {
     return weights.get();
 }
 
-void Layer::set_weights(float* new_weights) {
+void Layer::set_weights(const float* new_weights) {
     std::copy(new_weights, new_weights + this->getWeightSize(), weights.get());
 }
 
