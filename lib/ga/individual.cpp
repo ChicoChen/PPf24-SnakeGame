@@ -10,7 +10,7 @@
 constexpr int layer_sizes[4] = {32, 20, 12, 4};
 
 Individual::Individual()
-    : network(layer_sizes, 4, "relu", "sigmoid"){}
+    : network(layer_sizes, 3, "relu", "sigmoid"){}
 
 Direction Individual::get_direction(std::vector<float>& features) {
     std::vector<float> output = network.forward(features);
@@ -19,7 +19,7 @@ Direction Individual::get_direction(std::vector<float>& features) {
     for (int i = 1; i < output.size(); i++) {
         if (output[i] > output[max_idx]) max_idx = i;
     }
-    return static_cast<Direction>(max_idx);
+    return static_cast<Direction>(max_idx + 1);
 }
 
 void Individual::mutate(){
