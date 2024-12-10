@@ -1,4 +1,6 @@
 #include "ga/base_ga.h"
+
+#include <iostream>
 #include <omp.h>
 #include <cassert>
 #include <algorithm>
@@ -19,6 +21,9 @@ const Individual& BaseGA::GetBestIndividual(){
 
 void BaseGA::performSelection(){
     for(int i = 0; i < numSteps; i++){
+        #ifdef DEBUG
+        std::cout << "[baseGA] begin selection round: " << i << std::endl;
+        #endif
         EvaluateFitness(i);
         SelectionStep();
         updatePopulation();
@@ -39,6 +44,10 @@ void BaseGA::EvaluateFitness(int iteration){
     //when Individual.fitness() is called, fitness score of each object is calculated and cached for furture access
     //* potential chance for parallel.
     for(int i = 0; i < populationSize; i++){
+        #ifdef DEBUG
+        std::cout << "[baseGA] evaluating agent: " << i << std::endl;
+        #endif
+
         avgScores[iteration] += population[i].fitness();
         bestScores[iteration] = (population[i].fitness() > bestScores[iteration])?
                                 population[i].fitness():
@@ -49,6 +58,10 @@ void BaseGA::EvaluateFitness(int iteration){
 
 
 void BaseGA::updatePopulation(){
+    #ifdef DEBUG
+    std::cout << "[baseGA] population updated" << std::endl;
+    #endif
+
     double sum = 0;
     for(int i = 0; i < numSurvivor; i++){
         sum += population[i].fitness();
@@ -56,14 +69,13 @@ void BaseGA::updatePopulation(){
     
     // shuffle survivors to randomize parent slection
     std::shuffle(population.begin(), population.begin() + numSurvivor, gen);
-    
     while(currentPopulation < populationSize){
         std::vector<int> par = selectParents(sum);
         Individual &father = population[par[0]];
         Individual &mother = population[par[1]];
         std::vector<Individual> children = father.crossover(mother);
         for(auto &child : children){
-            child.mutate(); // currently do nothing
+            child.mutate(); //TODO: don't mutate all the child
             population[currentPopulation] = std::move(child);
             currentPopulation++;
         }

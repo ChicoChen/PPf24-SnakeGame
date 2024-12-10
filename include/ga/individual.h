@@ -15,7 +15,7 @@ public:
     void mutate();
     std::vector<Individual> crossover(const Individual& other);
     double fitness();
-    
+
 private:
     MLP network;
     double _fitness;

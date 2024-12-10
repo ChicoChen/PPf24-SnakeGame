@@ -49,10 +49,9 @@ void MLP::save(const std::string& filename) {
 
 void MLP::print_layers() {
     for (auto& layer : layers) {
-        layer.print_layer();
+        // layer.print_layer();
     }
 }
-
 
 Layer::Layer(int input_size, int output_size, const std::string& activation_name) : input_size(input_size), output_size(output_size) {
     activation = from_string(activation_name);

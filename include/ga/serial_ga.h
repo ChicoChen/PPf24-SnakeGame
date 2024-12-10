@@ -4,8 +4,7 @@
 
 class SerialGA: public BaseGA{
 public:
-    SerialGA(int populationSize = DEFAULT_POPULATION, int numSteps = DEFAULT_STEP):
-            BaseGA(populationSize, numSteps){};
+    SerialGA(int populationSize = DEFAULT_POPULATION, int numSteps = DEFAULT_STEP);
     
     void SelectionStep() override;
 };

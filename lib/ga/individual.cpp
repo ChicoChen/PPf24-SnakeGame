@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <random>
+#include <iostream>
 
 #define stddev 0.3
 
@@ -89,6 +90,11 @@ double Individual::fitness() {
 
     do {
         direction = get_direction(game.get_features());
+
+        #ifdef SHOWGAMEBOARD
+        game.dump();
+        std::cout << (int)direction << '\n';
+        #endif
     } while (game.run(direction));
 
     _fitness = game.calculate_fitness();
