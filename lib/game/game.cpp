@@ -44,9 +44,14 @@ bool Game::run(Direction ctrl) {
     food = *it;
     food_cand.erase(it);
     score++;
+    starvation = 10 * 10;
   }
   else {
     food_cand.insert(snake.get_last_pos());
+    starvation--;
+    if (starvation == 0) {
+      return false;
+    }
   }
   return true;
 }

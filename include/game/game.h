@@ -18,4 +18,5 @@ private:
   std::vector<float> features;
   int frame;
   int score;
+  int starvation;
 };
