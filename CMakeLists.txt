@@ -5,40 +5,44 @@ project(SnakeGame VERSION 1.0
 # CXX standard
 set(CMAKE_CXX_STANDARD 17)
 
+# Add option to control DEBUG output
+option(ENABLE_DEBUG "Enable debug output" ON)
+option(GAME_BOARD "Enable game board output" OFF)
+
 # third party libraries
 
 # game library
 add_library(gamelib STATIC
-    lib/game/game.cpp
-    lib/game/snake.cpp
+lib/game/game.cpp
+lib/game/snake.cpp
 )
 
 target_include_directories(gamelib
-  PUBLIC
-    ${PROJECT_SOURCE_DIR}/include
+PUBLIC
+${PROJECT_SOURCE_DIR}/include
 )
 
 # nn library
 add_library(nnlib STATIC
-    lib/nn/neural_network.cpp
-    lib/nn/activation_func.cpp
+lib/nn/neural_network.cpp
+lib/nn/activation_func.cpp
 )
 
 target_include_directories(nnlib
-  PUBLIC
-    ${PROJECT_SOURCE_DIR}/include
+PUBLIC
+${PROJECT_SOURCE_DIR}/include
 )
 
 # GA library
 add_library(galib STATIC
-    lib/ga/base_ga.cpp
-    lib/ga/serial_ga.cpp
-    lib/ga/individual.cpp
+lib/ga/base_ga.cpp
+lib/ga/serial_ga.cpp
+lib/ga/individual.cpp
 )
 
 target_include_directories(galib
-  PUBLIC
-    ${PROJECT_SOURCE_DIR}/include
+PUBLIC
+${PROJECT_SOURCE_DIR}/include
 )
 
 add_executable(game src/test_game.cpp)
@@ -52,3 +56,20 @@ target_link_libraries(nn nnlib)
 add_executable(ga src/test_ga.cpp)
 
 target_link_libraries(ga galib nnlib gamelib)
+
+# Conditionally define DEBUG macro based on the option
+if(ENABLE_DEBUG)
+  target_compile_definitions(gamelib PRIVATE DEBUG)
+  target_compile_definitions(nnlib PRIVATE DEBUG)
+  target_compile_definitions(galib PRIVATE DEBUG)
+  target_compile_definitions(game PRIVATE DEBUG)
+  target_compile_definitions(nn PRIVATE DEBUG)
+  target_compile_definitions(ga PRIVATE DEBUG)
+endif()
+
+if(GAME_BOARD)
+  target_compile_definitions(galib PRIVATE SHOWGAMEBOARD)
+  target_compile_definitions(game PRIVATE SHOWGAMEBOARD)
+  target_compile_definitions(nn PRIVATE SHOWGAMEBOARD)
+  target_compile_definitions(ga PRIVATE SHOWGAMEBOARD)
+endif()
