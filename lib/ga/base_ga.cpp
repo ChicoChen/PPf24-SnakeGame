@@ -78,8 +78,9 @@ void BaseGA::updatePopulation(){
         Individual &mother = population[par[1]];
         for(auto &child : father.crossover(mother)){
             child.mutate(); //maybe don't mutate all the child
-            population[currentPopulation - 1] = std::move(child);
-            currentPopulation++;
+            population[currentPopulation++] = std::move(child);
+            //edge condition: only need to add one child 
+            if(currentPopulation == populationSize) break;
         }
     }
 
