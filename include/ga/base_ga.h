@@ -44,7 +44,7 @@ private:
     virtual void SelectionStep() = 0;
     
     // performing crossover and mutation to fill the population gap result from selection.
-    void updatePopulation();
+    virtual void updatePopulation();
 
     // select 2 parents from suriviors using Roulette Wheel approach
     std::vector<int> selectParents(double sum);

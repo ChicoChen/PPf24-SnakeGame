@@ -22,6 +22,7 @@ const Individual& BaseGA::GetBestIndividual(){
 void BaseGA::performSelection(){
     for(int i = 0; i < numSteps; i++){
         #ifdef DEBUG
+        std::cout << "--------------------------------" << std::endl;
         std::cout << "[baseGA] begin selection round: " << i << std::endl;
         #endif
         EvaluateFitness(i);
@@ -44,24 +45,27 @@ void BaseGA::EvaluateFitness(int iteration){
     //when Individual.fitness() is called, fitness score of each object is calculated and cached for furture access
     //* potential chance for parallel.
     for(int i = 0; i < populationSize; i++){
-        #ifdef DEBUG
-        std::cout << "[baseGA] evaluating agent: " << i << std::endl;
-        #endif
+        double fitness = population[i].fitness();
 
-        avgScores[iteration] += population[i].fitness();
-        bestScores[iteration] = (population[i].fitness() > bestScores[iteration])?
-                                population[i].fitness():
+        #ifdef DEBUG
+        std::cout << "[baseGA] evaluating agent: " << i
+                  << "\tscore: " << fitness << std::endl;
+        #endif
+        avgScores[iteration] += fitness;
+        bestScores[iteration] = (fitness > bestScores[iteration])?
+                                fitness:
                                 bestScores[iteration];
     }
     avgScores[iteration] /= populationSize;
+
+    #ifdef DEBUG
+    std::cout << "[baseGA] bestScores: " << bestScores[iteration] <<
+                 ", avgScores: " << avgScores[iteration] << std::endl;
+    #endif
 }
 
 
 void BaseGA::updatePopulation(){
-    #ifdef DEBUG
-    std::cout << "[baseGA] population updated" << std::endl;
-    #endif
-
     double sum = 0;
     for(int i = 0; i < numSurvivor; i++){
         sum += population[i].fitness();
@@ -73,16 +77,22 @@ void BaseGA::updatePopulation(){
         std::vector<int> par = selectParents(sum);
         Individual &father = population[par[0]];
         Individual &mother = population[par[1]];
-        std::vector<Individual> children = father.crossover(mother);
-        for(auto &child : children){
-            child.mutate(); //TODO: don't mutate all the child
-            population[currentPopulation] = std::move(child);
-            currentPopulation++;
+        for(auto &child : father.crossover(mother)){
+            child.mutate(); //maybe don't mutate all the child
+            population[currentPopulation++] = std::move(child);
+            //edge condition: only need to add one child 
+            if(currentPopulation == populationSize) break;
         }
     }
+
+    #ifdef DEBUG
+    std::cout << "[baseGA] population updated" << std::endl;
+    #endif
 }
 
 std::vector<int> BaseGA::selectParents(double sum){
+    assert(numSurvivor >= 2 && sum >= 0);
+
     static int idx;
     std::vector<int> parents;
     std::uniform_real_distribution<> dis(0.0 , sum);

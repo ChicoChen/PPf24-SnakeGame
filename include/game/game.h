@@ -16,7 +16,7 @@ private:
   Point food;
   std::set<Point> food_cand;
   std::vector<float> features;
-  int frame;
-  int score;
-  int starvation;
+  int frame = 0;
+  int score = 0;
+  int starvation = 10 * 10;
 };
