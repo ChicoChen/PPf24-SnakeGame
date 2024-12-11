@@ -18,7 +18,7 @@ public:
 
 private:
     MLP network;
-    double _fitness;
+    double _fitness = 0;
     
     std::vector<Layer>& getLayers();
 };
