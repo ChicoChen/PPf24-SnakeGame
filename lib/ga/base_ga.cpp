@@ -22,6 +22,7 @@ const Individual& BaseGA::GetBestIndividual(){
 void BaseGA::performSelection(){
     for(int i = 0; i < numSteps; i++){
         #ifdef DEBUG
+        std::cout << "--------------------------------" << std::endl;
         std::cout << "[baseGA] begin selection round: " << i << std::endl;
         #endif
         EvaluateFitness(i);
