@@ -24,6 +24,8 @@ Game::Game() {
   std::advance(it, idx_rand);
   food = *it;
   food_cand.erase(it);
+
+  starvation = 10 * 10;
 }
 
 bool Game::run(Direction ctrl) {
