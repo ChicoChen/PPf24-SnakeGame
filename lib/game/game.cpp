@@ -2,6 +2,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <iterator>
+#include <random>
 
 
 static std::pair<int, int> eight_directions[8] = {
@@ -10,7 +11,7 @@ static std::pair<int, int> eight_directions[8] = {
   {1, -1}, {1, 0}, {1, 1}
 };
 
-Game::Game() {
+Game::Game(std::mt19937 &rng) : rng(rng) {
   features.clear();
   features.resize(32);
   snake = Snake();
@@ -20,17 +21,17 @@ Game::Game() {
     }
   }
   food_cand.erase(snake.get_body().front());
-  int idx_rand = rand() % food_cand.size();
+  int idx_rand = rng() % food_cand.size();
   auto it = food_cand.begin();
   std::advance(it, idx_rand);
   food = *it;
   food_cand.erase(it);
 
   // random move 2 times
-  int dir = rand() % 4 + 1;
+  int dir = rng() % 4 + 1;
   snake.move(static_cast<Direction>(dir));
   snake.grow();
-  dir = rand() % 4 + 1;
+  dir = rng() % 4 + 1;
   snake.move(static_cast<Direction>(dir));
   snake.grow();
 }
@@ -47,7 +48,7 @@ bool Game::run(Direction ctrl) {
   frame++;
   if (snake.get_body().front().x == food.x && snake.get_body().front().y == food.y) {
     snake.grow();
-    int idx_rand = rand() % food_cand.size();
+    int idx_rand = rng() % food_cand.size();
     auto it = food_cand.begin();
     std::advance(it, idx_rand);
     food = *it;
