@@ -15,6 +15,13 @@ Game::Game(std::mt19937 &rng) : rng(rng) {
   features.clear();
   features.resize(32);
   snake = Snake();
+  // random move 2 times
+  int dir = rng() % 4 + 1;
+  snake.move(static_cast<Direction>(dir));
+  snake.grow();
+  snake.move(static_cast<Direction>(dir));
+  snake.grow();
+
   for (int i = 0; i < 10; i++) {
     for (int j = 0; j < 10; j++) {
       food_cand.insert(Point(i, j));
@@ -26,14 +33,6 @@ Game::Game(std::mt19937 &rng) : rng(rng) {
   std::advance(it, idx_rand);
   food = *it;
   food_cand.erase(it);
-
-  // random move 2 times
-  int dir = rng() % 4 + 1;
-  snake.move(static_cast<Direction>(dir));
-  snake.grow();
-  dir = rng() % 4 + 1;
-  snake.move(static_cast<Direction>(dir));
-  snake.grow();
 }
 
 bool Game::run(Direction ctrl) {
