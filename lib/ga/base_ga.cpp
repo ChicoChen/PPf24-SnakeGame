@@ -59,8 +59,9 @@ void BaseGA::EvaluateFitness(int iteration){
     avgScores[iteration] /= populationSize;
 
     #ifdef DEBUG
-    std::cout << "[baseGA] bestScores: " << bestScores[iteration] <<
-                 ", avgScores: " << avgScores[iteration] << std::endl;
+    //TODO: another cmake macro for fine-grained output messages like this
+    // std::cout << "[baseGA] bestScores: " << bestScores[iteration] <<
+    //              ", avgScores: " << avgScores[iteration] << std::endl;
     #endif
 }
 

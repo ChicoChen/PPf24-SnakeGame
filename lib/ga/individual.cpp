@@ -22,6 +22,14 @@ Direction Individual::get_direction(std::vector<float>& features) {
     return static_cast<Direction>(max_idx + 1);
 }
 
+void Individual::save(const std::string& filename){
+    #ifdef DEBUG
+    std::cout << "model exported as " << filename << std::endl;
+    #endif
+
+    network.save(filename);
+}
+
 void Individual::mutate(){
     std::vector<Layer>& network = this->getLayers();
     int layerNum = network.size();
