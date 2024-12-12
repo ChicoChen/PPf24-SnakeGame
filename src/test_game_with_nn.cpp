@@ -16,11 +16,12 @@ Direction get_direction(Game& game, MLP& mlp) {
 }
 
 int main() {
-  srand(time(NULL));
   std::string model_name = "demo_1000_100";
   MLP mlp(model_name);
   // printf("Model loaded\n");
-  Game game = Game();
+  std::random_device rd;
+  std::mt19937 rng(rd());
+  Game game = Game(rng);
   Direction dir;
   do {
     game.dump();
