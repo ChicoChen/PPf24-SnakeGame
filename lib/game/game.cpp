@@ -19,7 +19,7 @@ Game::Game() {
     }
   }
   food_cand.erase(snake.get_body().front());
-  int idx_rand = rand() % food_cand.size();
+  int idx_rand = gen() % food_cand.size();
   auto it = food_cand.begin();
   std::advance(it, idx_rand);
   food = *it;
@@ -38,7 +38,7 @@ bool Game::run(Direction ctrl) {
   frame++;
   if (snake.get_body().front().x == food.x && snake.get_body().front().y == food.y) {
     snake.grow();
-    int idx_rand = rand() % food_cand.size();
+    int idx_rand = gen() % food_cand.size();
     auto it = food_cand.begin();
     std::advance(it, idx_rand);
     food = *it;

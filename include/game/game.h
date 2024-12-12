@@ -1,5 +1,6 @@
 #include "game/snake.h"
 #include "game/util.h"
+#include <random>
 #include <set>
 #include <vector>
 
@@ -18,5 +19,8 @@ private:
   std::vector<float> features;
   int frame = 0;
   int score = 0;
-  int starvation = 10 * 10;
+  int starvation = 100;
+  std::random_device rd;
+  std::mt19937 gen{rd()};
+  // std::uniform_int_distribution<> dis(1, 10000);
 };
