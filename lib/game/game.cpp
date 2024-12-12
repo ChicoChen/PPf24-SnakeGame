@@ -25,7 +25,12 @@ Game::Game() {
   std::advance(it, idx_rand);
   food = *it;
   food_cand.erase(it);
+
+  // random move 2 times
   int dir = rand() % 4 + 1;
+  snake.move(static_cast<Direction>(dir));
+  snake.grow();
+  dir = rand() % 4 + 1;
   snake.move(static_cast<Direction>(dir));
   snake.grow();
 }
