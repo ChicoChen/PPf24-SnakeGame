@@ -1,5 +1,6 @@
 #include "game/game.h"
 #include <cmath>
+#include <cstdlib>
 #include <iterator>
 
 
@@ -24,6 +25,9 @@ Game::Game() {
   std::advance(it, idx_rand);
   food = *it;
   food_cand.erase(it);
+  int dir = rand() % 4 + 1;
+  snake.move(static_cast<Direction>(dir));
+  snake.grow();
 }
 
 bool Game::run(Direction ctrl) {
