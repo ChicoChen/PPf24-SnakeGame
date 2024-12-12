@@ -3,12 +3,12 @@
 #include <iostream>
 #include <fstream>
 
+MLP::MLP(const std::vector<Layer>& layers) : layers(layers) {}
+
 MLP::MLP(const int* layer_sizes, int num_layers, const std::string& layer_activation, const std::string& output_activation) {
     for (int i = 0; i < num_layers; i++) {
         layers.emplace_back(layer_sizes[i], layer_sizes[i + 1], i == num_layers - 1 ? output_activation : layer_activation);
     }
-
-    // print_layers();
 }
 
 MLP::MLP(const std::string& filename) {
@@ -23,8 +23,6 @@ MLP::MLP(const std::string& filename) {
     for (int i = 0; i < num_layers; i++) {
         layers.emplace_back(file);
     }
-
-    // print_layers();
 }
 
 std::vector<float> MLP::forward(std::vector<float>& input) {
@@ -49,7 +47,7 @@ void MLP::save(const std::string& filename) {
 
 void MLP::print_layers() {
     for (auto& layer : layers) {
-        // layer.print_layer();
+        layer.print_layer();
     }
 }
 
@@ -102,37 +100,35 @@ Layer& Layer::operator=(Layer&& other) noexcept {
 Layer::Layer(const Layer& other)
     : input_size(other.input_size), output_size(other.output_size),
     activation(other.activation), activation_func(other.activation_func){
-    size_t weight_size = (input_size + 1) * output_size;
-    this->weights = std::make_unique<float[]>(weight_size);
+
+    size_t weights_size = get_weights_size();
+    weights = std::make_unique<float[]>(weights_size);
     
-    //perform deep copy from other.weights
-    this->set_weights(other.weights.get());
+    float* src = other.weights.get();
+    float* dest = weights.get();
+    std::copy(src, src + weights_size, dest);
 }
 
 Layer& Layer::operator=(const Layer& other){
     if (this != &other) {
-        this->input_size = other.input_size;
-        this->output_size = other.output_size;
-        this->activation = other.activation;
-        this->activation_func = other.activation_func;
+        input_size = other.input_size;
+        output_size = other.output_size;
+        activation = other.activation;
+        activation_func = other.activation_func;
 
-        weights.reset(new float[this->getWeightSize()]);
-        this->set_weights(other.getWeight());
+        float* src = other.weights.get();
+        float* dest = weights.get();
+        std::copy(src, src + (input_size + 1) * output_size, dest);
     }
-
     return *this;
 }
 
-size_t Layer::getWeightSize() const {
+size_t Layer::get_weights_size() const {
     return (input_size + 1) * output_size;
 }
 
-const float* Layer::getWeight() const {
+float* Layer::get_weights() {
     return weights.get();
-}
-
-void Layer::set_weights(const float* new_weights) {
-    std::copy(new_weights, new_weights + this->getWeightSize(), weights.get());
 }
 
 std::vector<float> Layer::forward(std::vector<float>& input) {

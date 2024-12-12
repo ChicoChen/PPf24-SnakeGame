@@ -1,16 +1,22 @@
 #include "ga/individual.h"
 #include "game/game.h"
+#include "nn/neural_network.h"
 
 #include <algorithm>
 #include <random>
 #include <iostream>
 
-#define stddev 0.3
+#define MUTATION_RATE 0.05
 
 constexpr int layer_sizes[4] = {32, 20, 12, 4};
 
+std::uniform_real_distribution<float> uni_dist(0.f, 1.f);
+std::normal_distribution<float> norm_dist(0.f, 1.f);
+
 Individual::Individual()
     : network(layer_sizes, 3, "relu", "sigmoid"){}
+
+Individual::Individual(MLP&& network) : network(std::move(network)) {}
 
 Direction Individual::get_direction(std::vector<float>& features) {
     std::vector<float> output = network.forward(features);
@@ -30,68 +36,52 @@ void Individual::save(const std::string& filename){
     network.save(filename);
 }
 
-void Individual::mutate(){
-    std::vector<Layer>& network = this->getLayers();
-    int layerNum = network.size();
-    
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::normal_distribution<float> dist(0.f, stddev);
-    
-    for(int i = 0 ; i < layerNum; i++){
-        size_t weightSize = network[i].getWeightSize();
-        float *new_weight = new float[weightSize];
-        std::copy(network[i].getWeight(), network[i].getWeight() + weightSize, new_weight);
+void Individual::mutate(std::mt19937& rng){
+    std::vector<Layer>& layers = network.layers;
 
-        for(int w = 0; w < weightSize; w++){
-            float sum = new_weight[w] + dist(gen);
-            new_weight[w] = std::min(1.f, std::max(-1.f, sum));
+    size_t n_layers = layers.size();
+    
+    std::normal_distribution<float> dist(0.f, 1.f);
+
+    for(int i = 0 ; i < n_layers; i++){
+        size_t weights_size = layers[i].get_weights_size();
+        float* weights = layers[i].get_weights();
+
+        for(int j = 0; j < weights_size; j++){
+            if (uni_dist(rng) < MUTATION_RATE) weights[j] += norm_dist(rng);
         }
-        network[i].set_weights(new_weight);
-        delete[] new_weight;
     }
 }
 
-std::vector<Individual> Individual::crossover(const Individual& other){
-    Individual child1(*this);
-    Individual child2(other);
+std::vector<Individual> Individual::crossover(std::mt19937& rng, const Individual& other){
+    const std::vector<Layer>& parent1 = network.layers;
+    const std::vector<Layer>& parent2 = other.network.layers;
 
-    std::vector<Layer>& network1 = child1.getLayers();
-    std::vector<Layer>& network2 = child2.getLayers();
-    int layerNum = network1.size();
+    size_t n_layers = parent1.size();
     
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dis(1, 10);
-    for(int i = 0 ; i < layerNum; i++){
-        size_t weightSize = network1[i].getWeightSize();
-        float *new_weight1 = new float[weightSize];
-        float *new_weight2 = new float[weightSize];
+    // copy parent layers
+    std::vector<Layer> child1(parent1), child2(parent2);
 
-        std::copy(network1[i].getWeight(), network1[i].getWeight() + weightSize, new_weight1);
-        std::copy(network2[i].getWeight(), network2[i].getWeight() + weightSize, new_weight2);
-        
-        for(int w = 0; w < weightSize; w++){
-            if(dis(gen) >5) std::swap(new_weight1[w], new_weight2[w]);
+    for (int i = 0 ; i < n_layers; i++){
+        size_t weights_size = child1[i].get_weights_size();
+
+        float* w1 = child1[i].get_weights();
+        float* w2 = child2[i].get_weights();
+
+        for (int j = 0; j < weights_size; j++){
+            if (uni_dist(rng) < 0.5){
+                std::swap(w1[j], w2[j]);
+            }
         }
-
-        network1[i].set_weights(new_weight1);
-        network2[i].set_weights(new_weight2);
-        delete[] new_weight1;
-        delete[] new_weight2;
     }
 
-    std::vector<Individual> offspring;
-    offspring.push_back(child1);
-    offspring.push_back(child2);
-    return offspring;
+    std::vector<Individual> offsprings;
+    offsprings.emplace_back(MLP(child1));
+    offsprings.emplace_back(MLP(child2));
+    return offsprings;
 }
 
 double Individual::fitness() {
-    if (_fitness != 0) {
-        // fitness already calculated, return cached value
-        return _fitness;
-    }
     // calculate fitness
     Game game = Game();
     Direction direction;
@@ -105,10 +95,5 @@ double Individual::fitness() {
         #endif
     } while (game.run(direction));
 
-    _fitness = game.calculate_fitness();
-    return _fitness;
-}
-
-std::vector<Layer>& Individual::getLayers(){
-    return network.getLayers();
+    return game.calculate_fitness();
 }

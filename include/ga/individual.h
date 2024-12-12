@@ -3,9 +3,15 @@
 #include "game/util.h"
 #include "nn/neural_network.h"
 
+#include <random>
+
 class Individual {
 public:
     Individual();
+
+    // initialize with predefined network
+    Individual(MLP&& network);
+
     Individual(const Individual& other) = default;
     ~Individual() = default;
 
@@ -14,13 +20,10 @@ public:
     Direction get_direction(std::vector<float>& features);
     void save(const std::string& filename);
 
-    void mutate();
-    std::vector<Individual> crossover(const Individual& other);
+    void mutate(std::mt19937& rng);
+    std::vector<Individual> crossover(std::mt19937& rng, const Individual& other);
     double fitness();
 
 private:
     MLP network;
-    double _fitness = 0;
-    
-    std::vector<Layer>& getLayers();
 };

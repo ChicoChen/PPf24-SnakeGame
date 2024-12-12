@@ -14,16 +14,14 @@ public:
     Layer(Layer&& other) noexcept;
     Layer& operator=(Layer&& other) noexcept;
 
-    //deep copy constructor
     Layer(const Layer& other);
     Layer& operator=(const Layer& other);
 
-    std::vector<float> forward(std::vector<float>& input);
-    
-    size_t getWeightSize() const;
-    const float* getWeight() const;
+    size_t get_weights_size() const;
+    float* get_weights();
 
-    void set_weights(const float* new_weights);
+    std::vector<float> forward(std::vector<float>& input);
+
     void save(std::ofstream& file);
     void print_layer();
 
@@ -40,15 +38,19 @@ public:
     friend class Individual;
 
     MLP();
+
+    // initialize with predefined layers
+    MLP(const std::vector<Layer>& layers);
+
+    // initialize with random weights
     MLP(const int* layer_sizes, int num_layers, const std::string& layer_activation, const std::string& output_activation);
-    MLP(const std::string& filename);  // Load weights from file
+
+    // initialize with weights from file
+    MLP(const std::string& filename);
 
     std::vector<float> forward(std::vector<float>& input);
     void save(const std::string& filename);
     void print_layers();
-
-protected:
-    std::vector<Layer>& getLayers() {return layers; }
 
 private:
     std::vector<Layer> layers;
