@@ -57,6 +57,10 @@ add_executable(ga src/test_ga.cpp)
 
 target_link_libraries(ga galib nnlib gamelib)
 
+add_executable(test_snake src/test_game_with_nn.cpp)
+
+target_link_libraries(test_snake gamelib nnlib)
+
 # Conditionally define DEBUG macro based on the option
 if(ENABLE_DEBUG)
   target_compile_definitions(gamelib PRIVATE DEBUG)
