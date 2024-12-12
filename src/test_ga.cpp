@@ -2,8 +2,9 @@
 #include <iostream>
 
 int main() {
-    SerialGA demo(10, 5);
+    SerialGA demo(1000, 100);
     demo.performSelection();
     Individual best = demo.GetBestIndividual();
+    best.save("demo_1000_100");
     return 0;
 }

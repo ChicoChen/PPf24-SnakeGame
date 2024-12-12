@@ -12,6 +12,8 @@ public:
     Individual& operator=(Individual&& other) noexcept = default;
 
     Direction get_direction(std::vector<float>& features);
+    void save(const std::string& filename);
+
     void mutate();
     std::vector<Individual> crossover(const Individual& other);
     double fitness();
