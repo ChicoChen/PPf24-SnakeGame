@@ -1,6 +1,7 @@
 #include "game/game.h"
 #include <cmath>
 #include <iterator>
+#include <random>
 
 
 static std::pair<int, int> eight_directions[8] = {
@@ -9,17 +10,24 @@ static std::pair<int, int> eight_directions[8] = {
   {1, -1}, {1, 0}, {1, 1}
 };
 
-Game::Game() {
+Game::Game(std::mt19937 &rng) : rng(rng) {
   features.clear();
   features.resize(32);
   snake = Snake();
+  // random move 2 times
+  int dir = rng() % 4 + 1;
+  snake.move(static_cast<Direction>(dir));
+  snake.grow();
+  snake.move(static_cast<Direction>(dir));
+  snake.grow();
+
   for (int i = 0; i < 10; i++) {
     for (int j = 0; j < 10; j++) {
       food_cand.insert(Point(i, j));
     }
   }
   food_cand.erase(snake.get_body().front());
-  int idx_rand = rand() % food_cand.size();
+  int idx_rand = rng() % food_cand.size();
   auto it = food_cand.begin();
   std::advance(it, idx_rand);
   food = *it;
@@ -38,7 +46,7 @@ bool Game::run(Direction ctrl) {
   frame++;
   if (snake.get_body().front().x == food.x && snake.get_body().front().y == food.y) {
     snake.grow();
-    int idx_rand = rand() % food_cand.size();
+    int idx_rand = rng() % food_cand.size();
     auto it = food_cand.begin();
     std::advance(it, idx_rand);
     food = *it;

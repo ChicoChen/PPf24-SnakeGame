@@ -1,7 +1,10 @@
 #include "game/game.h"
 #include <iostream>
+#include <random>
 int main() {
-  Game game;
+  std::random_device rd;
+  std::mt19937 rng(rd());
+  Game game(rng);
   char ctrl;
   game.dump();
   while (std::cin >> ctrl) {
