@@ -81,7 +81,7 @@ std::vector<Individual> Individual::crossover(std::mt19937& rng, const Individua
     return offsprings;
 }
 
-double Individual::fitness(std::mt19937 &rng) {
+double Individual::calculate_fitness(std::mt19937 &rng) {
     // calculate fitness
     Game game = Game(rng);
     Direction direction;
@@ -95,5 +95,6 @@ double Individual::fitness(std::mt19937 &rng) {
         #endif
     } while (game.run(direction));
 
-    return game.calculate_fitness();
+    _fitness = game.calculate_fitness();
+    return _fitness;
 }

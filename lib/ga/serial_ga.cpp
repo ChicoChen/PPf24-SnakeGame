@@ -16,6 +16,6 @@ void SerialGA::SelectionStep() {
     #endif
 
     std::sort(getPopulation().begin(), getPopulation().end(),
-              [](Individual &a, Individual &b)-> bool {return a.fitness() > b.fitness();});
+              [](Individual &a, Individual &b)-> bool {return a.get_fitness() > b.get_fitness();});
     currentPopulation = numSurvivor;
 }

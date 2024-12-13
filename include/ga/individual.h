@@ -22,8 +22,9 @@ public:
 
     void mutate(std::mt19937& rng);
     std::vector<Individual> crossover(std::mt19937& rng, const Individual& other);
-    double fitness(std::mt19937& rng);
-
+    double calculate_fitness(std::mt19937& rng);
+    double get_fitness(){ return _fitness; }
 private:
     MLP network;
+    double _fitness = 0;
 };

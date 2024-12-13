@@ -9,8 +9,9 @@ const Individual& BaseGA::GetBestIndividual(){
     int bestIndvIdx = -1;
     double maxScore = 0;
     for(int i = 0; i < populationSize; i++){
-        if(population[i].fitness() > maxScore){
-            maxScore = population[i].fitness();
+        double score = population[i].get_fitness();
+        if(score > maxScore){
+            maxScore = score;
             bestIndvIdx = i;
         }
     }
@@ -34,10 +35,10 @@ void BaseGA::performSelection(){
 //TODO: build an env file to handle hyperparameters 
 BaseGA::BaseGA(int populationSize, int numSteps, int thread_num):
     population(populationSize),
-    bestScores(numSteps, 0),
-    avgScores(numSteps, 0),
     populationSize(populationSize),
     currentPopulation(populationSize),
+    bestScores(numSteps, 0),
+    avgScores(numSteps, 0),
     numSteps(numSteps),
     numSurvivor(populationSize * SURVIVAL_RATE),
     thread_num(thread_num){
@@ -52,7 +53,7 @@ BaseGA::BaseGA(int populationSize, int numSteps, int thread_num):
 void BaseGA::EvaluateFitness(int iteration){
     //* potential chance for parallel.
     for(int i = 0; i < populationSize; i++){
-        double fitness = population[i].fitness(genrators[0]);
+        double fitness = population[i].calculate_fitness(genrators[0]);
 
         #ifdef DEBUG
         std::cout << "[baseGA] evaluating agent: " << i
@@ -76,7 +77,7 @@ void BaseGA::EvaluateFitness(int iteration){
 void BaseGA::updatePopulation(){
     double sum = 0;
     for(int i = 0; i < numSurvivor; i++){
-        sum += population[i].fitness();
+        sum += population[i].get_fitness();
     }
     
     // shuffle survivors to randomize parent slection
@@ -85,7 +86,7 @@ void BaseGA::updatePopulation(){
         std::vector<int> par = selectParents(sum);
         Individual &father = population[par[0]];
         Individual &mother = population[par[1]];
-        
+
         for(auto &child : father.crossover(genrators[0], mother)){
             child.mutate(genrators[0]);
             population[currentPopulation++] = std::move(child);
@@ -110,7 +111,7 @@ std::vector<int> BaseGA::selectParents(double sum){
         double threshold = dis(genrators[0]);
         double count = 0;
         for(int candidate = 0; candidate < numSurvivor; candidate++){
-            count += population[candidate].fitness();
+            count += population[candidate].get_fitness();
             if(count >= threshold){
                 parents.push_back(candidate);
                 break;
