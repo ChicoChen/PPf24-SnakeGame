@@ -3,8 +3,8 @@
 #include <iostream>
 #include <algorithm>
 
-SerialGA::SerialGA(int populationSize, int numSteps):
-            BaseGA(populationSize, numSteps){
+SerialGA::SerialGA(int populationSize, int numSteps, int thread_num):
+            BaseGA(populationSize, numSteps, thread_num){
                 #ifdef DEBUG
                 std::cout << "initialize new SerialGA" << std::endl;
                 #endif

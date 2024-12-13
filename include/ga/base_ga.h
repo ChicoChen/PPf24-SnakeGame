@@ -20,7 +20,7 @@ public:
     // perform the whole selection process.
     void performSelection();
 
-    BaseGA(int populationSize = DEFAULT_POPULATION, int numSteps = DEFAULT_STEP);
+    BaseGA(int populationSize = DEFAULT_POPULATION, int numSteps = DEFAULT_STEP, int thread_num = 1);
     ~BaseGA() = default;
 
 protected:
@@ -35,7 +35,8 @@ private:
     std::vector<double> bestScores; 
     std::vector<double> avgScores;
 
-    std::mt19937 gen;
+    int thread_num;
+    std::vector<std::mt19937> genrators;
     
     // Evaluate fitness score for all current population;
     virtual void EvaluateFitness(int iteration);

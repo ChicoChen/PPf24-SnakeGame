@@ -31,21 +31,28 @@ void BaseGA::performSelection(){
     }
 }
 
-BaseGA::BaseGA(int populationSize, int numSteps):
+//TODO: build an env file to handle hyperparameters 
+BaseGA::BaseGA(int populationSize, int numSteps, int thread_num):
     population(populationSize),
     bestScores(numSteps, 0),
     avgScores(numSteps, 0),
     populationSize(populationSize),
     currentPopulation(populationSize),
     numSteps(numSteps),
-    numSurvivor(populationSize * SURVIVAL_RATE), //todo: build an env file to handle hyperparameters 
-    gen(std::random_device{}()){}
+    numSurvivor(populationSize * SURVIVAL_RATE),
+    thread_num(thread_num){
+        // construct one generator for each thread. default is serial
+        std::random_device rd;
+        for(int i = 0; i < thread_num; i++){
+            genrators.emplace_back(rd());
+        }
+    }
 
+//when Individual.fitness() is called, fitness score of each object is calculated and cached for furture access
 void BaseGA::EvaluateFitness(int iteration){
-    //when Individual.fitness() is called, fitness score of each object is calculated and cached for furture access
     //* potential chance for parallel.
     for(int i = 0; i < populationSize; i++){
-        double fitness = population[i].fitness();
+        double fitness = population[i].fitness(genrators[0]);
 
         #ifdef DEBUG
         std::cout << "[baseGA] evaluating agent: " << i
@@ -73,13 +80,14 @@ void BaseGA::updatePopulation(){
     }
     
     // shuffle survivors to randomize parent slection
-    std::shuffle(population.begin(), population.begin() + numSurvivor, gen);
+    std::shuffle(population.begin(), population.begin() + numSurvivor, genrators[0]);
     while(currentPopulation < populationSize){
         std::vector<int> par = selectParents(sum);
         Individual &father = population[par[0]];
         Individual &mother = population[par[1]];
-        for(auto &child : father.crossover(mother)){
-            child.mutate(); //maybe don't mutate all the child
+        
+        for(auto &child : father.crossover(genrators[0], mother)){
+            child.mutate(genrators[0]);
             population[currentPopulation++] = std::move(child);
             //edge condition: only need to add one child 
             if(currentPopulation == populationSize) break;
@@ -99,7 +107,7 @@ std::vector<int> BaseGA::selectParents(double sum){
     std::uniform_real_distribution<> dis(0.0 , sum);
 
     for(int i = 0; i < 2; i++){
-        double threshold = dis(gen);
+        double threshold = dis(genrators[0]);
         double count = 0;
         for(int candidate = 0; candidate < numSurvivor; candidate++){
             count += population[candidate].fitness();
