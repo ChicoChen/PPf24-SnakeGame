@@ -48,7 +48,7 @@ void Individual::mutate(std::mt19937& rng){
         float* weights = layers[i].get_weights();
 
         for(int j = 0; j < weights_size; j++){
-            if (uni_dist(rng) < MUTATION_RATE) weights[j] += norm_dist(rng);
+            if (uni_dist(rng) < MUTATION_RATE) weights[j] += norm_dist(rng) * 0.2;
         }
     }
 }
