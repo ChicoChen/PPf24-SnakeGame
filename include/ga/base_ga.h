@@ -3,10 +3,12 @@
 #include "ga/individual.h"
 #include <random>
 #include <vector>
+#include <string>
 
 #define DEFAULT_POPULATION 100
 #define DEFAULT_STEP 5
 #define SURVIVAL_RATE 0.5
+#define DEFAULT_TIME_INTERVAL 10
 
 /*
 Base class for all genetic algorithm implementations.
@@ -18,7 +20,9 @@ public:
     // return the best individual, parallelized by omp
     virtual const Individual& get_best_individual();
     // perform the whole selection process.
-    void perform_selection();
+    void perform_selection(int print_interval = DEFAULT_TIME_INTERVAL);
+    // export a log file for training info.
+    void export_train_log(const std::string& filename, int log_interval = DEFAULT_TIME_INTERVAL);
 
     BaseGA(int population_size = DEFAULT_POPULATION, int num_steps = DEFAULT_STEP, int thread_num = 1);
     ~BaseGA() = default;
@@ -39,7 +43,7 @@ private:
     std::vector<std::mt19937> genrators;
     
     // Evaluate fitness score for all current population;
-    virtual void evaluate_fitness(int iteration);
+    virtual void evaluate_fitness(int iteration, int print_interval);
     
     // Retain only the top n% of the population, various implementation depending on the GA model.
     virtual void selection_step() = 0;

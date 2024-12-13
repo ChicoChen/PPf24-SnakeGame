@@ -1,6 +1,7 @@
 #include "ga/base_ga.h"
 
 #include <iostream>
+#include <fstream>
 #include <omp.h>
 #include <cassert>
 #include <algorithm>
@@ -20,16 +21,34 @@ const Individual& BaseGA::get_best_individual(){
     return population[best_indv_idx];
 }
 
-void BaseGA::perform_selection(){
+void BaseGA::perform_selection(int print_interval){
     for(int i = 0; i < num_steps; i++){
         #ifdef DEBUG
-        std::cout << "--------------------------------" << std::endl;
-        std::cout << "[baseGA] begin selection round: " << i << std::endl;
+        if (i % print_interval == 0){
+            std::cout << "[baseGA] round: " << i << std::endl;
+        }
         #endif
-        evaluate_fitness(i);
+
+        evaluate_fitness(i, print_interval);
         selection_step();
         update_population();
     }
+}
+
+// log the average and best performance during selection
+void BaseGA::export_train_log(const std::string& logfile, int log_interval){
+    std::ofstream log(logfile);
+    if (!log.is_open()) {
+        std::cerr << "[BaseGA]Failed to open logfile " << logfile << std::endl;
+        return;
+    }
+
+    log << population_size << ' ' << num_steps << std::endl;
+    for(int i = 0; i < num_steps; i++){
+        if(i % log_interval == 0)
+            log  << i << ' ' << best_scores[i] << ' ' << avg_scores[i] << std::endl;
+    }
+    std::cout << "[BaseGA] exported log file " << logfile << std::endl;
 }
 
 //TODO: build an env file to handle hyperparameters 
@@ -50,16 +69,10 @@ BaseGA::BaseGA(int population_size, int num_steps, int thread_num):
     }
 
 //when Individual.fitness() is called, fitness score of each object is calculated and cached for furture access
-void BaseGA::evaluate_fitness(int iteration){
+void BaseGA::evaluate_fitness(int iteration, int print_interval){
     //* potential chance for parallel.
     for(int i = 0; i < population_size; i++){
         double fitness = population[i].calculate_fitness(genrators[0]);
-
-        #ifdef DEBUG
-        // TODO: another cmake macro for fine-grained output messages like this
-        // std::cout << "[baseGA] evaluating agent: " << i
-        //           << "\tscore: " << fitness << std::endl;
-        #endif
         avg_scores[iteration] += fitness;
         best_scores[iteration] = (fitness > best_scores[iteration])?
                                 fitness:
@@ -67,9 +80,13 @@ void BaseGA::evaluate_fitness(int iteration){
     }
     avg_scores[iteration] /= population_size;
 
+    // print debug message
     #ifdef DEBUG
-    std::cout << "[baseGA] best_scores: " << best_scores[iteration] <<
-                 ", avg_scores: " << avg_scores[iteration] << std::endl;
+    if(iteration % print_interval == 0){
+        std::cout << "[baseGA] best_scores: " << best_scores[iteration] <<
+                     ", avg_scores: " << avg_scores[iteration] << std::endl;
+        std::cout << "--------------------------------" << std::endl;
+    }
     #endif
 }
 
