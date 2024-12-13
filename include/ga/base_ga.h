@@ -16,37 +16,37 @@ It provides common methods such as ...
 class BaseGA{
 public:
     // return the best individual, parallelized by omp
-    virtual const Individual& GetBestIndividual();
+    virtual const Individual& get_best_individual();
     // perform the whole selection process.
-    void performSelection();
+    void perform_selection();
 
-    BaseGA(int populationSize = DEFAULT_POPULATION, int numSteps = DEFAULT_STEP, int thread_num = 1);
+    BaseGA(int population_size = DEFAULT_POPULATION, int num_steps = DEFAULT_STEP, int thread_num = 1);
     ~BaseGA() = default;
 
 protected:
-    std::vector<Individual>& getPopulation(){ return population; }
-    int populationSize;
-    int currentPopulation;
-    int numSurvivor;
-    int numSteps;
+    std::vector<Individual>& get_population(){ return population; }
+    int population_size;
+    int current_population;
+    int num_survivor;
+    int num_steps;
 
 private:
     std::vector<Individual> population;
-    std::vector<double> bestScores; 
-    std::vector<double> avgScores;
+    std::vector<double> best_scores; 
+    std::vector<double> avg_scores;
 
     int thread_num;
     std::vector<std::mt19937> genrators;
     
     // Evaluate fitness score for all current population;
-    virtual void EvaluateFitness(int iteration);
+    virtual void evaluate_fitness(int iteration);
     
     // Retain only the top n% of the population, various implementation depending on the GA model.
-    virtual void SelectionStep() = 0;
+    virtual void selection_step() = 0;
     
     // performing crossover and mutation to fill the population gap result from selection.
-    virtual void updatePopulation();
+    virtual void update_population();
 
     // select 2 parents from suriviors using Roulette Wheel approach
-    std::vector<int> selectParents(double sum);
+    std::vector<int> select_parents(double sum);
 };
