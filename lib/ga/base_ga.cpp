@@ -2,9 +2,9 @@
 
 #include <iostream>
 #include <fstream>
-#include <omp.h>
 #include <cassert>
 #include <algorithm>
+#include <chrono>
 
 const Individual& BaseGA::get_best_individual(){
     int best_indv_idx = -1;
@@ -22,6 +22,7 @@ const Individual& BaseGA::get_best_individual(){
 }
 
 void BaseGA::perform_selection(int print_interval){
+    start_time = chrono_clock::now();
     for(int i = 0; i < num_steps; i++){
         #ifdef DEBUG
         if (i % print_interval == 0){
@@ -33,6 +34,12 @@ void BaseGA::perform_selection(int print_interval){
         selection_step();
         update_population();
     }
+
+    total_time = chrono_clock::now() - start_time;
+    #ifdef DEBUG
+    std::cout << "[baseGA] total_selection time: " << total_time.count() << 's' << std::endl;
+
+    #endif
 }
 
 // log the average and best performance during selection
@@ -43,7 +50,8 @@ void BaseGA::export_train_log(const std::string& logfile, int log_interval){
         return;
     }
 
-    log << population_size << ' ' << num_steps << std::endl;
+    log << population_size << ' ' << num_steps << ' '
+        << total_time.count() << std::endl;
     for(int i = 0; i < num_steps; i++){
         if(i % log_interval == 0)
             log  << i << ' ' << best_scores[i] << ' ' << avg_scores[i] << std::endl;

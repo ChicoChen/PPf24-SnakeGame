@@ -4,12 +4,14 @@
 #include <random>
 #include <vector>
 #include <string>
+#include <chrono>
 
 #define DEFAULT_POPULATION 100
 #define DEFAULT_STEP 5
 #define SURVIVAL_RATE 0.5
 #define DEFAULT_TIME_INTERVAL 10
 
+using chrono_clock = std::chrono::high_resolution_clock;
 /*
 Base class for all genetic algorithm implementations.
 This class serves as the foundation for implementing various genetic algorithms. 
@@ -42,6 +44,9 @@ private:
     int thread_num;
     std::vector<std::mt19937> genrators;
     
+    chrono_clock::time_point start_time;
+    std::chrono::duration<double> total_time;
+
     // Evaluate fitness score for all current population;
     virtual void evaluate_fitness(int iteration, int print_interval);
     

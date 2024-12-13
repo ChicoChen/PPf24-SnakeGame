@@ -3,10 +3,10 @@
 
 int main() {
     SerialGA demo(1000, 1000);
-    demo.perform_selection();
+    demo.perform_selection(50);
     Individual best = demo.get_best_individual();
-    best.save("demo_1000_500");
+    best.save("demo_1000_1000");
 
-    demo.export_train_log("demo_1000_500.log", 1000 / 50);
+    demo.export_train_log("demo_1000_1000.log", 50);
     return 0;
 }
