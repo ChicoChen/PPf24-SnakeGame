@@ -80,7 +80,7 @@ BaseGA::BaseGA(int population_size, int num_steps, int thread_num):
 void BaseGA::evaluate_fitness(int iteration, int print_interval){
     //* potential chance for parallel.
     for(int i = 0; i < population_size; i++){
-        double fitness = population[i].calculate_fitness(genrators[0]);
+        double fitness = population[i].calculate_fitness(genrators[0].gen);
         avg_scores[iteration] += fitness;
         best_scores[iteration] = (fitness > best_scores[iteration])?
                                 fitness:
@@ -106,14 +106,14 @@ void BaseGA::update_population(){
     }
     
     // shuffle survivors to randomize parent slection
-    std::shuffle(population.begin(), population.begin() + num_survivor, genrators[0]);
+    std::shuffle(population.begin(), population.begin() + num_survivor, genrators[0].gen);
     while(current_population < population_size){
-        std::vector<int> par = select_parents(sum);
+        std::vector<int> par = select_parents(sum, genrators[0].gen);
         Individual &father = population[par[0]];
         Individual &mother = population[par[1]];
 
-        for(auto &child : father.crossover(genrators[0], mother)){
-            child.mutate(genrators[0]);
+        for(auto &child : father.crossover(genrators[0].gen, mother)){
+            child.mutate(genrators[0].gen);
             population[current_population++] = std::move(child);
             //edge condition: only need to add one child 
             if(current_population == population_size) break;
@@ -121,7 +121,7 @@ void BaseGA::update_population(){
     }
 }
 
-std::vector<int> BaseGA::select_parents(double sum){
+std::vector<int> BaseGA::select_parents(double sum, std::mt19937 &generator){
     assert(num_survivor >= 2 && sum >= 0);
 
     static int idx;
@@ -129,7 +129,7 @@ std::vector<int> BaseGA::select_parents(double sum){
     std::uniform_real_distribution<> dis(0.0 , sum);
 
     for(int i = 0; i < 2; i++){
-        double threshold = dis(genrators[0]);
+        double threshold = dis(generator);
         double count = 0;
         for(int candidate = 0; candidate < num_survivor; candidate++){
             count += population[candidate].get_fitness();

@@ -11,7 +11,7 @@ SerialGA::SerialGA(int population_size, int num_steps, int thread_num):
             }
 
 void SerialGA::selection_step() {
-    std::sort(get_population().begin(), get_population().end(),
+    std::sort(population.begin(), population.end(),
               [](Individual &a, Individual &b)-> bool {return a.get_fitness() > b.get_fitness();});
     current_population = num_survivor;
 }
