@@ -66,7 +66,7 @@ int main(int argc, char *argv[]) {
 
   // 創建視窗
   SDL_Window* window = SDL_CreateWindow(
-      "SDL2 Grid Example",
+      "Sanke Ai Viewer",
       SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
       WINDOW_SIZE, WINDOW_SIZE,
       SDL_WINDOW_SHOWN
