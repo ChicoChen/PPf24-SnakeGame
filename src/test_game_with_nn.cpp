@@ -16,9 +16,9 @@ Direction get_direction(Game& game, MLP& mlp) {
 }
 
 int main() {
-  std::string model_name = "demo_1000_100";
+  // currently, a pre-trained model is places in the root directory of the repo
+  std::string model_name = "./demo_1000_1000";
   MLP mlp(model_name);
-  // printf("Model loaded\n");
   std::random_device rd;
   std::mt19937 rng(rd());
   Game game = Game(rng);
