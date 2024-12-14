@@ -137,7 +137,7 @@ std::vector<float> &Game::get_features() {
   return features; 
 }
 
-float Game::calculate_fitness() const {
+double Game::calculate_fitness() const {
   // self._fitness = self._frames + ((2 ** self.score) + (self.score ** 2.1) * 100) - ((.25 * self._frames) ** 1.3) * (self.score ** 1.2))
   return frame + (pow(2, score) + pow(score, 2.1) * 100) - (pow(0.25 * frame, 1.3) * pow(score, 1.2));
 }

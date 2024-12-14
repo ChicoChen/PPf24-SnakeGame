@@ -10,7 +10,7 @@ public:
   bool run(Direction ctrl);
   std::vector<float> &get_features() ;
   void dump() const;
-  float calculate_fitness() const;
+  double calculate_fitness() const;
   void get_game_state(std::vector<std::vector<int> > &game_state) const;
 private:
   Snake snake;
