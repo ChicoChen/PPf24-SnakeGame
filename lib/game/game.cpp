@@ -137,7 +137,19 @@ std::vector<float> &Game::get_features() {
   return features; 
 }
 
-float Game::calculate_fitness() const {
+double Game::calculate_fitness() const {
   // self._fitness = self._frames + ((2 ** self.score) + (self.score ** 2.1) * 100) - ((.25 * self._frames) ** 1.3) * (self.score ** 1.2))
   return frame + (pow(2, score) + pow(score, 2.1) * 100) - (pow(0.25 * frame, 1.3) * pow(score, 1.2));
+}
+
+void Game::get_game_state(std::vector<std::vector<int>> &game_state) const {
+  for (int i = 0; i < 10; i++) {
+    for (int j = 0; j < 10; j++) {
+      game_state[i][j] = 0;
+    }
+  }
+  for (auto &p : snake.get_body()) {
+    game_state[p.y][p.x] = 1;
+  }
+  game_state[food.y][food.x] = 2;
 }
