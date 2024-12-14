@@ -21,8 +21,10 @@ class BaseGA{
 public:
     // return the best individual, parallelized by omp
     virtual const Individual& get_best_individual();
+    
     // perform the whole selection process.
     void perform_selection(int print_interval = DEFAULT_TIME_INTERVAL);
+
     // export a log file for training info.
     void export_train_log(const std::string& filename, int log_interval = DEFAULT_TIME_INTERVAL);
 
@@ -30,23 +32,31 @@ public:
     ~BaseGA() = default;
 
 protected:
-    std::vector<Individual>& get_population(){ return population; }
+    //cache aligned to avoid false-sharing
+    struct alignas(std::hardware_destructive_interference_size) Padded19937 {
+        std::mt19937 gen;
+        Padded19937(unsigned int seed): gen(seed){}
+    };
+
     int population_size;
     int current_population;
     int num_survivor;
     int num_steps;
 
-private:
     std::vector<Individual> population;
     std::vector<double> best_scores; 
     std::vector<double> avg_scores;
 
     int thread_num;
-    std::vector<std::mt19937> genrators;
+    std::vector<Padded19937> generators;
     
     chrono_clock::time_point start_time;
     std::chrono::duration<double> total_time;
+    
+    // select 2 parents from suriviors using Roulette Wheel approach
+    std::vector<int> select_parents(double sum, std::mt19937 &generator);
 
+private:
     // Evaluate fitness score for all current population;
     virtual void evaluate_fitness(int iteration, int print_interval);
     
@@ -55,7 +65,4 @@ private:
     
     // performing crossover and mutation to fill the population gap result from selection.
     virtual void update_population();
-
-    // select 2 parents from suriviors using Roulette Wheel approach
-    std::vector<int> select_parents(double sum);
 };
