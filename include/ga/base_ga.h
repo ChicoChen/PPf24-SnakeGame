@@ -48,7 +48,7 @@ protected:
     std::vector<double> avg_scores;
 
     int thread_num;
-    std::vector<Padded19937> genrators;
+    std::vector<Padded19937> generators;
     
     chrono_clock::time_point start_time;
     std::chrono::duration<double> total_time;
