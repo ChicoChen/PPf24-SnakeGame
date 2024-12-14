@@ -22,7 +22,7 @@ void render_grid(SDL_Renderer* renderer, const std::vector<std::vector<int>>& ma
           SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // Red
           break;
         default:
-          SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // White
+          SDL_SetRenderDrawColor(renderer, 128, 128, 128, 255); // Gray
           break;
       }
 
@@ -106,7 +106,7 @@ int main(int argc, char *argv[]) {
 
     SDL_RenderPresent(renderer);
 
-    SDL_Delay(100); 
+    SDL_Delay(50); 
     dir = get_direction(game, mlp);
   } while (game.run(dir) && running);
   
