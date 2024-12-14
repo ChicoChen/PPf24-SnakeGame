@@ -11,7 +11,13 @@ option(GAME_BOARD "Enable game board output" OFF)
 
 # third party libraries
 
-find_package(SDL2 REQUIRED)
+include(FetchContent)
+FetchContent_Declare(
+    SDL2
+    GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
+    GIT_TAG release-2.28.2
+)
+FetchContent_MakeAvailable(SDL2)
 
 # game library
 add_library(gamelib STATIC
@@ -83,6 +89,7 @@ if(GAME_BOARD)
 endif()
 
 # Snake Viewer 
+# include_directories(${SDL2_INCLUDE_DIR})
 add_executable(snake_viewer src/snake_viewer.cpp)
-target_include_directories(snake_viewer PUBLIC ${SDL2_INCLUDE_DIR})
-target_link_libraries(snake_viewer PRIVATE SDL2::SDL2 gamelib nnlib)
+# target_include_directories(snake_viewer PUBLIC SDL2::SDL2)
+target_link_libraries(snake_viewer PRIVATE SDL2::SDL2  SDL2::SDL2main gamelib nnlib)
