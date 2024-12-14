@@ -5,7 +5,7 @@ project(SnakeGame VERSION 1.0
 # CXX standard
 set(CMAKE_CXX_STANDARD 17)
 
-# locates the OpenMP, 
+# locates the OpenMP package
 find_package(OpenMP REQUIRED)
 
 if(OpenMP_CXX_FOUND)
