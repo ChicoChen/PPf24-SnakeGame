@@ -11,6 +11,12 @@
 #define SURVIVAL_RATE 0.5
 #define DEFAULT_TIME_INTERVAL 10
 
+#ifndef __cpp_lib_hardware_interference_size
+namespace std {
+    constexpr std::size_t hardware_destructive_interference_size = 64;
+}
+#endif
+
 using chrono_clock = std::chrono::high_resolution_clock;
 /*
 Base class for all genetic algorithm implementations.
