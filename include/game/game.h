@@ -12,6 +12,7 @@ public:
   void dump() const;
   double calculate_fitness() const;
   void get_game_state(std::vector<std::vector<int> > &game_state) const;
+  int get_score() const { return score; }
 private:
   Snake snake;
   Point food;
