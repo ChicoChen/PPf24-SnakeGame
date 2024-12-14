@@ -11,6 +11,8 @@ option(GAME_BOARD "Enable game board output" OFF)
 
 # third party libraries
 
+find_package(SDL2 REQUIRED)
+
 # game library
 add_library(gamelib STATIC
 lib/game/game.cpp
@@ -45,6 +47,8 @@ PUBLIC
 ${PROJECT_SOURCE_DIR}/include
 )
 
+
+# test executables
 add_executable(game src/test_game.cpp)
 
 target_link_libraries(game gamelib)
@@ -77,3 +81,8 @@ if(GAME_BOARD)
   target_compile_definitions(nn PRIVATE SHOWGAMEBOARD)
   target_compile_definitions(ga PRIVATE SHOWGAMEBOARD)
 endif()
+
+# Snake Viewer 
+add_executable(snake_viewer src/snake_viewer.cpp)
+target_include_directories(snake_viewer PUBLIC ${SDL2_INCLUDE_DIR})
+target_link_libraries(snake_viewer PRIVATE SDL2::SDL2 gamelib nnlib)
