@@ -46,6 +46,9 @@ bool Game::run(Direction ctrl) {
   frame++;
   if (snake.get_body().front().x == food.x && snake.get_body().front().y == food.y) {
     snake.grow();
+    if (food_cand.empty()) {
+      return false;
+    }
     int idx_rand = rng() % food_cand.size();
     auto it = food_cand.begin();
     std::advance(it, idx_rand);
