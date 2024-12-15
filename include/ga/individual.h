@@ -1,17 +1,16 @@
 #pragma once
 
+#include <random>
+
 #include "game/util.h"
 #include "nn/neural_network.h"
 
-#include <random>
-
 class Individual {
-public:
+   public:
     Individual();
 
     // initialize with predefined network
     Individual(MLP&& network);
-
     Individual(const Individual& other) = default;
     ~Individual() = default;
 
@@ -22,9 +21,14 @@ public:
 
     void mutate(std::mt19937& rng);
     std::vector<Individual> crossover(std::mt19937& rng, const Individual& other);
-    double calculate_fitness(std::mt19937& rng);
-    double get_fitness(){ return _fitness; }
-private:
+
+    // each call to `evaluate()`, the fitness score will be re-calculated
+    void evaluate(std::mt19937& rng);
+
+    // score and fitness calculated by `evaluate()`, cached
+    int score;
+    double fitness;
+
+   private:
     MLP network;
-    double _fitness = 0;
 };

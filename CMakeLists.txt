@@ -49,6 +49,7 @@ ${PROJECT_SOURCE_DIR}/include
 
 # GA library
 add_library(galib STATIC
+lib/ga/logger.cpp
 lib/ga/individual.cpp
 lib/ga/base_ga.cpp
 lib/ga/serial_ga.cpp
