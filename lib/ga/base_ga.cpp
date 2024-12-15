@@ -60,6 +60,8 @@ void BaseGA::execute(int print_interval) {
 
     logger.print_iteration_summary();
     logger.log_finish();
+
+    logger.export_log();
 }
 
 void BaseGA::update_population() {
