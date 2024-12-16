@@ -50,7 +50,7 @@ Direction get_direction(Game& game, MLP& mlp) {
 
 int main(int argc, char *argv[]) {
   // currently, a pre-trained model is places in the root directory of the repo
-  std::string model_name = "./demo_1000_1000";
+  std::string model_name = "./1214_openmp-2_1000_1000";
   MLP mlp(model_name);
   std::random_device rd;
   std::mt19937 rng(rd());

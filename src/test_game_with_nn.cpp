@@ -16,9 +16,9 @@ Direction get_direction(Game& game, MLP& mlp) {
     return static_cast<Direction>(max_idx + 1);
 }
 
-int main() {
+int main(int argc, char** argv) {
     // currently, a pre-trained model is places in the root directory of the repo
-    std::string model_name = "./serial_1024_1000_model.bin";
+    std::string model_name = argv[1];
     MLP mlp(model_name);
     std::random_device rd;
     std::mt19937 rng(rd());
