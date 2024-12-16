@@ -106,7 +106,7 @@ int main(int argc, char *argv[]) {
 
     SDL_RenderPresent(renderer);
 
-    SDL_Delay(50); 
+    SDL_Delay(10); 
     dir = get_direction(game, mlp);
   } while (game.run(dir) && running);
   

@@ -2,6 +2,9 @@
 
 #include <algorithm>
 #include <cassert>
+#include <chrono>
+
+using chrono_clock = std::chrono::high_resolution_clock;
 
 // TODO: build an env file to handle hyperparameters
 BaseGA::BaseGA(std::string exp_name, int population_size, int num_steps, int thread_num)
@@ -23,40 +26,43 @@ BaseGA::BaseGA(std::string exp_name, int population_size, int num_steps, int thr
 void BaseGA::execute(int print_interval) {
     logger.log_start();
 
+    chrono_clock::time_point starting_point;
+    std::chrono::duration<double> step_total_time;
     for (int i = 0; i < num_steps; i++) {
+        starting_point = chrono_clock::now();
         evaluate_fitness();
 
-        int best_idx = 0;  // best individual with highest fitness
         double best_fitness = 0, avg_fitness = 0;
         int best_score = 0;
         double avg_score = 0;
 
         for (int j = 0; j < population_size; j++) {
-            if (population[j].fitness > best_fitness) {
-                best_fitness = population[j].fitness;
-                best_idx = j;
-            }
+            best_fitness = std::max(best_fitness, population[j].fitness);
             avg_fitness += population[j].fitness;
             avg_score += population[j].score;
             best_score = std::max(best_score, population[j].score);
         }
-
         avg_fitness /= population_size;
         avg_score /= population_size;
 
-        logger.log_iteration(best_fitness, avg_fitness, best_score, avg_score);
+        selection_step();
 
-        // save the best individual
-        population[best_idx].save(exp_name);
+        double median_fitness = population[population_size / 2].fitness;
+        int median_score = population[population_size / 2].score;
 
+        update_population();
+
+        step_total_time = chrono_clock::now() - starting_point;
+        logger.log_iteration(best_fitness, avg_fitness, median_fitness, best_score, avg_score, median_score, step_total_time.count());
 #ifdef DEBUG
         if (i % print_interval == 0) {
             logger.print_iteration_summary();
         }
 #endif
-        selection_step();
-        update_population();
     }
+
+    // save the best individual
+    population[0].save(exp_name);
 
     logger.print_iteration_summary();
     logger.log_finish();
