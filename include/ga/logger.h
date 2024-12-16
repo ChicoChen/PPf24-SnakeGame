@@ -14,7 +14,7 @@ class Logger {
     void log_finish();
 
     void log_iteration(double best_fitness, double avg_fitness, double med_fitness,
-                       int best_score, double avg_score, int med_score);
+                       int best_score, double avg_score, int med_score, double step_time);
 
     void print_iteration_summary();
     void export_log();
@@ -26,6 +26,7 @@ class Logger {
     std::vector<int> best_score;
     std::vector<double> avg_score;
     std::vector<int> med_score;
+    std::vector<double> step_times;
 
     chrono_clock::time_point start_time;
     std::chrono::duration<double> total_time;
