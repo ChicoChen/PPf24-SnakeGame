@@ -13,7 +13,8 @@ class Logger {
     void log_start();
     void log_finish();
 
-    void log_iteration(double best_fitness, double avg_fitness, int best_score, double avg_score);
+    void log_iteration(double best_fitness, double avg_fitness, double med_fitness,
+                       int best_score, double avg_score, int med_score);
 
     void print_iteration_summary();
     void export_log();
@@ -21,9 +22,10 @@ class Logger {
    private:
     std::string filename;
 
-    std::vector<double> best_fitness, avg_fitness;
+    std::vector<double> best_fitness, avg_fitness, med_fitness;
     std::vector<int> best_score;
     std::vector<double> avg_score;
+    std::vector<int> med_score;
 
     chrono_clock::time_point start_time;
     std::chrono::duration<double> total_time;

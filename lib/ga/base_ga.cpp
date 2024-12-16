@@ -44,17 +44,20 @@ void BaseGA::execute(int print_interval) {
         avg_fitness /= population_size;
         avg_score /= population_size;
 
-        logger.log_iteration(best_fitness, avg_fitness, best_score, avg_score);
-
         // save the best individual
         population[best_idx].save(exp_name);
+
+        selection_step();
+        double median_fitness = population[population_size / 2].fitness;
+        int median_score = population[population_size / 2].score;
+        logger.log_iteration(best_fitness, avg_fitness, median_fitness, best_score, avg_score, median_score);
 
 #ifdef DEBUG
         if (i % print_interval == 0) {
             logger.print_iteration_summary();
         }
 #endif
-        selection_step();
+
         update_population();
     }
 
