@@ -19,8 +19,8 @@ class Individual {
     Direction get_direction(std::vector<float>& features);
     void save(const std::string& filename);
 
-    void mutate(std::mt19937& rng);
-    std::vector<Individual> crossover(std::mt19937& rng, const Individual& other);
+    void mutate(int idx);
+    std::vector<Individual> crossover(const Individual& other);
 
     // each call to `evaluate()`, the fitness score will be re-calculated
     void evaluate(std::mt19937& rng);

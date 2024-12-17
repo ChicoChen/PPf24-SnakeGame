@@ -1,6 +1,8 @@
 #include "ga/openmp_ga.h"
 
 int main(int argc , char** argv) {
+    // srand for rand() in Layer's constructor
+    srand(42);
     int thread_num = atoi(argv[2]);
     OpenmpGA demo(argv[1], 1024, 1500, thread_num);
     demo.execute(50);

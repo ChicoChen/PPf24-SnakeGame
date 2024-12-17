@@ -1,30 +1,24 @@
 #!/bin/bash
 
 build_dir="./build"
-model_dir="./models/release_4"
+model_dir="./models/fixate_experiment"
 mkdir "$model_dir" 
-# Serial runs
-# for i in {1..10}; do
-#     modelFile="exp_serial${i}_1024_1500"
-#     modelLog="$modelFile.txt"
-#     taskset -c 0 "${build_dir}/test_serial" "$modelFile"
-#  
-#     mv "${modelFile}" "$model_dir"
-#     mv "${modelLog}" "$model_dir"
-#     echo "Run $i completed with parameter: $modelFile"
-# done
+serialModel="exp_serial_1024_1500"
+SerialLog="$serialModel.txt"
+taskset -c 0 "${build_dir}/test_serial" "$serialModel"
+ 
+mv "${serialModel}" "$model_dir"
+mv "${SerialLog}" "$model_dir"
+echo "Run completed with parameter: $serialModel"
 
 # Parallel runs
-threadNum=4
-for i in {1..5}; do
-    modelFile="exp_openmp${i}_1024_1500"
-    modelLog="$modelFile.txt"
+threadNum=8
+parallelModel="exp_openmp_1024_1500"
+parallelLog="$parallelModel.txt"
 
-    taskset -c 0-3 "${build_dir}/test_openmp" "$modelFile" $threadNum
+taskset -c 0-3 "${build_dir}/test_openmp" "$parallelModel" $threadNum
 
-    mv "$modelFile" "$model_dir"
-    mv "$modelLog" "$model_dir"
-    echo "Run $i completed with parameter: $modelFile, $threadNum"
-done
-
+mv "$parallelModel" "$model_dir"
+mv "$parallelLog" "$model_dir"
+echo "Run completed with parameter: $parallelModel, $threadNum"
 echo "All runs completed."

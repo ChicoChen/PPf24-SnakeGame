@@ -53,7 +53,7 @@ class BaseGA {
     Logger logger;
 
     // select 2 parents from suriviors using Roulette Wheel approach
-    std::vector<int> select_parents(double sum, std::mt19937& generator);
+    std::vector<int> select_parents(int index);
 
    private:
     // Evaluate fitness score for all current population.

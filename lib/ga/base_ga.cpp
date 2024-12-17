@@ -19,7 +19,7 @@ BaseGA::BaseGA(std::string exp_name, int population_size, int num_steps, int thr
     // construct one generator for each thread. default is serial
     std::random_device rd;
     for (int i = 0; i < thread_num; i++) {
-        generators.emplace_back(rd());
+        generators.emplace_back(42+i);
     }
 }
 
@@ -78,12 +78,12 @@ void BaseGA::update_population() {
     // shuffle survivors to randomize parent slection
     std::shuffle(population.begin(), population.begin() + num_survivor, generators[0].gen);
     while (current_population < population_size) {
-        std::vector<int> par = select_parents(sum, generators[0].gen);
+        std::vector<int> par = select_parents(current_population);
         Individual &father = population[par[0]];
         Individual &mother = population[par[1]];
 
-        for (auto &child : father.crossover(generators[0].gen, mother)) {
-            child.mutate(generators[0].gen);
+        for (auto &child : father.crossover(mother)) {
+            child.mutate(current_population);
             population[current_population++] = std::move(child);
             // edge condition: only need to add one child
             if (current_population == population_size) break;
@@ -91,24 +91,13 @@ void BaseGA::update_population() {
     }
 }
 
-std::vector<int> BaseGA::select_parents(double sum, std::mt19937 &generator) {
-    assert(num_survivor >= 2 && sum >= 0);
+std::vector<int> BaseGA::select_parents(int index) {
+    assert(num_survivor >= 2);
 
-    static int idx;
     std::vector<int> parents;
-    std::uniform_real_distribution<> dis(0.0, sum);
-
-    for (int i = 0; i < 2; i++) {
-        double threshold = dis(generator);
-        double count = 0;
-        for (int candidate = 0; candidate < num_survivor; candidate++) {
-            count += population[candidate].fitness;
-            if (count >= threshold) {
-                parents.push_back(candidate);
-                break;
-            }
-        }
-    }
-
+    int father = index - num_survivor;
+    int mother = (father + 1 == num_survivor)? 0 : father + 1;
+    parents.push_back(father);
+    parents.push_back(mother);
     return parents;
 }

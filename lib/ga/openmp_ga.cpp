@@ -37,8 +37,8 @@ void OpenmpGA::update_population() {
     for (int i = 0; i < num_survivor; i++) {
         sum += population[i].fitness;
     }
+    
     std::shuffle(population.begin(), population.begin() + num_survivor, generators[0].gen);
-
     int target_num = population_size - current_population;
 #pragma omp parallel
     {
@@ -48,12 +48,12 @@ void OpenmpGA::update_population() {
         if (thread_id == thread_num - 1) thread_workload += target_num % thread_num;
         std::vector<Individual> local_offsprings;
         while (local_offsprings.size() < thread_workload) {
-            std::vector<int> par = select_parents(sum, generators[thread_id].gen);
+            std::vector<int> par = select_parents(start_pos + local_offsprings.size());
             Individual &father = population[par[0]];
             Individual &mother = population[par[1]];
 
-            for (auto &child : father.crossover(generators[thread_id].gen, mother)) {
-                child.mutate(generators[thread_id].gen);
+            for (auto &child : father.crossover(mother)) {
+                child.mutate(start_pos + local_offsprings.size());
                 local_offsprings.emplace_back(std::move(child));
                 if (local_offsprings.size() == thread_workload) break;
             }
