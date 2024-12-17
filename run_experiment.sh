@@ -2,13 +2,13 @@
 
 build_dir="./build"
 model_dir="./models/debug_8"
-
+mkdir "$model_dir" 
 # Serial runs
 for i in {1..10}; do
     modelFile="exp_serial${i}_1024_1500"
     modelLog="$modelFile.log"
     taskset -c 0 "${build_dir}/test_serial" "$modelFile"
-
+ 
     mv "${modelFile}" "$model_dir"
     mv "${modelLog}" "$model_dir"
     echo "Run $i completed with parameter: $modelFile"
