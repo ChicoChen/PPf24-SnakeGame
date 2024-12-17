@@ -15,7 +15,7 @@ BaseGA::BaseGA(std::string exp_name, int population_size, int num_steps, int thr
       num_steps(num_steps),
       num_survivor(population_size * SURVIVAL_RATE),
       thread_num(thread_num),
-      logger(exp_name + ".log", num_steps) {
+      logger(exp_name + ".txt", num_steps) {
     // construct one generator for each thread. default is serial
     std::random_device rd;
     for (int i = 0; i < thread_num; i++) {

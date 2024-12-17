@@ -46,8 +46,8 @@ void Logger::export_log() {
     
     file << total_time.count() << std::endl;
     for (int i = 0; i < best_fitness.size(); i++) {
-        file << i << ' ' << best_fitness[i] << ' ' << avg_fitness[i] << ' ' << med_fitness[i] << ' '
-                         << best_score[i] << ' ' << avg_score[i] << ' ' << med_score[i]  << ' ' << step_times[i] << std::endl;
+        file << i << ',' << best_fitness[i] << ',' << avg_fitness[i] << ',' << med_fitness[i] << ','
+                         << best_score[i] << ',' << avg_score[i] << ',' << med_score[i]  << ',' << step_times[i] << std::endl;
     }
     std::cout << "[Logger] Exported log file " << filename << std::endl;
 }

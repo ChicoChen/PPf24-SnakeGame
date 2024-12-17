@@ -1,26 +1,26 @@
 #!/bin/bash
 
 build_dir="./build"
-model_dir="./models/debug_8"
+model_dir="./models/release_4"
 mkdir "$model_dir" 
 # Serial runs
-for i in {1..10}; do
-    modelFile="exp_serial${i}_1024_1500"
-    modelLog="$modelFile.log"
-    taskset -c 0 "${build_dir}/test_serial" "$modelFile"
- 
-    mv "${modelFile}" "$model_dir"
-    mv "${modelLog}" "$model_dir"
-    echo "Run $i completed with parameter: $modelFile"
-done
+# for i in {1..10}; do
+#     modelFile="exp_serial${i}_1024_1500"
+#     modelLog="$modelFile.txt"
+#     taskset -c 0 "${build_dir}/test_serial" "$modelFile"
+#  
+#     mv "${modelFile}" "$model_dir"
+#     mv "${modelLog}" "$model_dir"
+#     echo "Run $i completed with parameter: $modelFile"
+# done
 
 # Parallel runs
-threadNum=8
-for i in {1..10}; do
+threadNum=4
+for i in {1..5}; do
     modelFile="exp_openmp${i}_1024_1500"
-    modelLog="$modelFile.log"
+    modelLog="$modelFile.txt"
 
-    taskset -c 0-7 "${build_dir}/test_openmp" "$modelFile" $threadNum
+    taskset -c 0-3 "${build_dir}/test_openmp" "$modelFile" $threadNum
 
     mv "$modelFile" "$model_dir"
     mv "$modelLog" "$model_dir"
