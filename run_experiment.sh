@@ -1,7 +1,7 @@
 #!/bin/bash
 
 build_dir="./build"
-model_dir="./models/scheduled_release_8"
+model_dir="./models/dynamic_release_8"
 mkdir "$model_dir" 
 # Serial runs
 # for i in {1..10}; do
