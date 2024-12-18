@@ -14,10 +14,11 @@ OpenmpGA::OpenmpGA(std::string exp_name, int population_size, int num_steps, int
 }
 
 void OpenmpGA::evaluate_fitness() {
+    int chunk_size = population_size / (thread_num * 2);
 #pragma omp parallel
     {
         int thread_id = omp_get_thread_num();
-#pragma omp for
+#pragma omp for schedule(static, chunk_size)
         for (int i = 0; i < population_size; i++) {
             population[i].evaluate(generators[thread_id].gen);
         }

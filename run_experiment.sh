@@ -1,7 +1,7 @@
 #!/bin/bash
 
 build_dir="./build"
-model_dir="./models/release_4"
+model_dir="./models/scheduled_release_4"
 mkdir "$model_dir" 
 # Serial runs
 # for i in {1..10}; do
@@ -16,7 +16,7 @@ mkdir "$model_dir"
 
 # Parallel runs
 threadNum=4
-for i in {1..5}; do
+for i in {5..10}; do
     modelFile="exp_openmp${i}_1024_1500"
     modelLog="$modelFile.txt"
 
