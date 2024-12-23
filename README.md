@@ -5,6 +5,7 @@ PPf24-SnakeGame is a research-focused project that explores parallelizing Geneti
 ## Table of Contents
 
 - [Build](#build)
+- [Usage](#usage)
 - [License](#license)
 
 ## Build
@@ -33,6 +34,32 @@ cmake ..
 
 ```bash
 make -j
+```
+
+## Usage
+
+- Snake Viewer (GUI)
+
+```bash
+./snake_gui <model_file>
+```
+
+- Snake Viewer (TUI)
+
+```bash
+./snake_tui <model_file>
+```
+
+- GA Training (serial)
+
+```bash
+./test_serial <output_file>
+```
+
+- GA Training (parallel)
+
+```bash
+./test_openmp <output_file> <thread_num>
 ```
 
 ## License

@@ -17,6 +17,10 @@ Direction get_direction(Game& game, MLP& mlp) {
 }
 
 int main(int argc, char** argv) {
+    if (argc != 2) {
+        std::cerr << "Usage: " << argv[0] << " <model_file>" << std::endl;
+        return 1;
+    }
     // currently, a pre-trained model is places in the root directory of the repo
     std::string model_name = argv[1];
     MLP mlp(model_name);

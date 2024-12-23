@@ -14,8 +14,8 @@ option(ENABLE_GAME_BOARD "Enable game board output" OFF)
 
 # third party libraries
 if(OpenMP_CXX_FOUND)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-endif()    
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+endif()
 
 include(FetchContent)
 FetchContent_Declare(
@@ -63,8 +63,8 @@ ${PROJECT_SOURCE_DIR}/include
 
 
 # test executables
-add_executable(game src/test_game.cpp)
-target_link_libraries(game gamelib)
+add_executable(tui_game src/test_game.cpp)
+target_link_libraries(tui_game gamelib)
 
 add_executable(nn src/test_nn.cpp)
 target_link_libraries(nn nnlib)
@@ -78,8 +78,8 @@ if(OpenMP_CXX_FOUND)
   target_link_libraries(test_openmp PRIVATE OpenMP::OpenMP_CXX galib nnlib gamelib)
 endif()
 
-add_executable(test_snake src/test_game_with_nn.cpp)
-target_link_libraries(test_snake gamelib nnlib)
+add_executable(snake_tui src/test_game_with_nn.cpp)
+target_link_libraries(snake_tui gamelib nnlib)
 
 # Conditionally define DEBUG macro based on the option
 if(ENABLE_DEBUG)
@@ -90,8 +90,8 @@ if(ENABLE_GAME_BOARD)
   add_compile_definitions(GAME_BOARD)
 endif()
 
-# Snake Viewer 
+# Snake Viewer
 # include_directories(${SDL2_INCLUDE_DIR})
-add_executable(snake_viewer src/snake_viewer.cpp)
+add_executable(snake_gui src/snake_viewer.cpp)
 # target_include_directories(snake_viewer PUBLIC SDL2::SDL2)
-target_link_libraries(snake_viewer PRIVATE SDL2::SDL2  SDL2::SDL2main gamelib nnlib)
+target_link_libraries(snake_gui PRIVATE SDL2::SDL2  SDL2::SDL2main gamelib nnlib)
